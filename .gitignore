@@ -35,3 +35,4 @@ SKSE/skse/_UpgradeReport_Files/*
 SKSE/skse/UpgradeLog.XML
 SKSE/skse/ipch/*
 SKSE/skse/*
+*.sdf
