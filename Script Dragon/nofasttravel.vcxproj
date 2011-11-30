@@ -65,8 +65,7 @@
     </Link>
     <PostBuildEvent>
       <Command>md "..\bin"
-copy "$(OutDir)$(TargetName)$(TargetExt)" "..\bin"
-copy "..\bin\$(TargetFileName)" "D:\Games\Skyrim\asi\$(TargetFileName)"</Command>
+copy "$(OutDir)$(TargetName)$(TargetExt)" "..\bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
