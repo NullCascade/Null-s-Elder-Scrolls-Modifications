@@ -36,3 +36,4 @@ SKSE/skse/*
 *.sdf
 Script Dragon/common/*
 tmp/*
+*.opensdf
