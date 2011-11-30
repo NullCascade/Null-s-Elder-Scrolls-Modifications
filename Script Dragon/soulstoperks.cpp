@@ -8,6 +8,7 @@
 
 // Definitions.
 #define CONFIG_FILE "soulstoperks.ini"
+#define WAIT_TIME 200
 
 
 // Costs.
@@ -85,44 +86,37 @@ main(
 	)
 {
 	// Initialization.
-	debugMode = IniReadInt( CONFIG_FILE, "general", "debug", 0 );
 	BYTE keyBuyPerkPoint = IniReadInt( CONFIG_FILE, "general", "buyKey", 0xDE );
+	debugMode = IniReadInt( CONFIG_FILE, "general", "debug", 0 );
 	PPC_Constant = IniReadInt( CONFIG_FILE, "cost", "constant", PPC_Constant );
-	if ( debugMode ) PrintNote( "PPC_Constant = %d", PPC_Constant );
 	PPC_Level = IniReadInt( CONFIG_FILE, "cost", "levelMult", PPC_Level );
-	if ( debugMode ) PrintNote( "PPC_Level = %d", PPC_Level );
 
 	// Main plugin loop.
 	while ( true ) {
 		// Calculate them perk points.
 		if ( GetKeyPressed( keyBuyPerkPoint ) ) {
 			int perkPointCost = GetPerkPointCost();
-			if ( debugMode ) PrintNote( "perkPointCost = %d", perkPointCost );
 			int perkCount = GetPerkCount();
-			if ( debugMode ) PrintNote( "perkCount = %d", perkCount );
 			int dragonSouls = GetDragonSoulCount();
-			if ( debugMode ) PrintNote( "dragonSouls = %d", dragonSouls );
 
 			// Can we get more perks?
 			if ( perkCount > 200 ) {
 				PrintNote( "Too many perks. Get rid of some and try again." );
-				Wait( 100 );
+				Wait( WAIT_TIME );
 			}
 
 			// Do we have enough souls?
 			else if ( dragonSouls < perkPointCost ) {
 				PrintNote( "%d dragon souls are required for more power.", perkPointCost );
-				Wait( 100 );
+				Wait( WAIT_TIME );
 			}
 
 			// All's good? Give me my perk!
 			else {
 				SetDragonSoulCount( dragonSouls - perkPointCost );
-				if ( debugMode ) PrintNote( "SetDragonSoulCount( %d )", dragonSouls - perkPointCost );
 				SetPerkCount( perkCount + 1 );
-				if ( debugMode ) PrintNote( "SetPerkCount( %d )", perkCount + 1 );
 				PrintNote( "The souls of %d dragons have granted you new power.", perkPointCost );
-				Wait( 100 );
+				Wait( WAIT_TIME );
 			}
 		}
 
