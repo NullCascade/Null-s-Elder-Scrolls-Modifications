@@ -10,5 +10,5 @@ Script Dragon, created by Alexander Blade, is a Skyrim engine extender, which al
 
 I currently have two plugins:
 
- * [No Fast Travel](http://www.skyrimnexus.com/downloads/file.php?id=2075) - Disables the use of fast travel.
  * [Dragon Souls to Perk Points](http://www.skyrimnexus.com/downloads/file.php?id=2063) - Allows the user to convert those useless late-game dragon souls into precious and rare perk points. Configurable to be as cheap or costly as you desire.
+ * [No Fast Travel](http://www.skyrimnexus.com/downloads/file.php?id=2075) - Disables the use of fast travel.
