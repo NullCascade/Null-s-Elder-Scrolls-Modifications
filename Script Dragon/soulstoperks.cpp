@@ -8,7 +8,7 @@
 
 // Definitions.
 #define CONFIG_FILE "soulstoperks.ini"
-#define WAIT_TIME 200
+#define WAIT_TIME 2000
 
 
 // Costs.
@@ -102,13 +102,17 @@ main(
 			// Can we get more perks?
 			if ( perkCount > 200 ) {
 				PrintNote( "Too many perks. Get rid of some and try again." );
-				Wait( WAIT_TIME );
+				PrintNote( "Waiting %d miliseconds...", 1000 );
+				Wait( 1000 );
+				PrintNote( "Waiting complete.", 1000 );
 			}
 
 			// Do we have enough souls?
 			else if ( dragonSouls < perkPointCost ) {
 				PrintNote( "%d dragon souls are required for more power.", perkPointCost );
-				Wait( WAIT_TIME );
+				PrintNote( "Waiting %d miliseconds...", 1000 );
+				Wait( 1000 );
+				PrintNote( "Waiting complete.", 1000 );
 			}
 
 			// All's good? Give me my perk!
@@ -116,7 +120,9 @@ main(
 				SetDragonSoulCount( dragonSouls - perkPointCost );
 				SetPerkCount( perkCount + 1 );
 				PrintNote( "The souls of %d dragons have granted you new power.", perkPointCost );
-				Wait( WAIT_TIME );
+				PrintNote( "Waiting %d miliseconds...", 1000 );
+				Wait( 1000 );
+				PrintNote( "Waiting complete.", 1000 );
 			}
 		}
 
