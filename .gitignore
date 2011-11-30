@@ -35,3 +35,4 @@ SKSE/skse/ipch/*
 SKSE/skse/*
 *.sdf
 Script Dragon/common/*
+tmp/*
