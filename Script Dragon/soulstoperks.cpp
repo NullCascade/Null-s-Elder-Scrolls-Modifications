@@ -8,13 +8,12 @@
 
 // Definitions.
 #define CONFIG_FILE "soulstoperks.ini"
-#define WAIT_TIME 2000
 
 
 // Costs.
 int PPC_Constant = 10;
 int PPC_Level = 0;
-int debugMode = 1;
+int debugMode = 0;
 
 
 // GetPerkPointCost - Calculates the cost of buying a perk point.
@@ -32,21 +31,12 @@ GetPerkPointCost(
 }
 
 
-// GetPlayerCharacter - Borrowed from the 'Perk Reset' plugin from hitachihex.
-DWORD
-GetPlayerCharacter(
-	)
-{
-	return ( ( ( DWORD(__thiscall*)(DWORD) )0xA03CD0 )( 0x0155C064 ) );
-}
-
-
 // GetPerkCount - Borrowed from the 'Perk Reset' plugin from hitachihex.
 unsigned char
 GetPerkCount(
 	) 
 {
-	return ( ((unsigned char(__thiscall*)(DWORD))0x9E8E70)( GetPlayerCharacter() ) );
+	return *(unsigned char*)( (DWORD)( Game::GetPlayer() ) + 0x6D1 );
 }
 
 
@@ -56,8 +46,7 @@ SetPerkCount(
 	unsigned char i_Count
 	)
 {
-	((void(__thiscall*)(DWORD, unsigned char))0x9E8E90)( GetPlayerCharacter(), i_Count );
-	return;
+	*(unsigned char*)( (DWORD)( Game::GetPlayer() ) + 0x6D1 ) = i_Count;
 }
 
 
@@ -102,27 +91,21 @@ main(
 			// Can we get more perks?
 			if ( perkCount > 200 ) {
 				PrintNote( "Too many perks. Get rid of some and try again." );
-				PrintNote( "Waiting %d miliseconds...", 1000 );
 				Wait( 1000 );
-				PrintNote( "Waiting complete.", 1000 );
 			}
 
 			// Do we have enough souls?
 			else if ( dragonSouls < perkPointCost ) {
 				PrintNote( "%d dragon souls are required for more power.", perkPointCost );
-				PrintNote( "Waiting %d miliseconds...", 1000 );
 				Wait( 1000 );
-				PrintNote( "Waiting complete.", 1000 );
 			}
 
 			// All's good? Give me my perk!
 			else {
 				SetDragonSoulCount( dragonSouls - perkPointCost );
 				SetPerkCount( perkCount + 1 );
-				PrintNote( "The souls of %d dragons have granted you new power.", perkPointCost );
-				PrintNote( "Waiting %d miliseconds...", 1000 );
+				PrintNote( "The souls of %d dragons have granted you a new power.", perkPointCost );
 				Wait( 1000 );
-				PrintNote( "Waiting complete.", 1000 );
 			}
 		}
 
