@@ -28,11 +28,10 @@ obj/
 _ReSharper*/
 [Tt]est[Rr]esult*
 OBSE/*
-Dragon Script/common/*
-Dragon Script/scripts.sdf
 SKSE/common/*
 SKSE/skse/_UpgradeReport_Files/*
 SKSE/skse/UpgradeLog.XML
 SKSE/skse/ipch/*
 SKSE/skse/*
 *.sdf
+Script Dragon/common/*
