@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nofasttravel", "nofasttrave
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "toggleui", "toggleui.vcxproj", "{334E99EE-71BF-482A-862E-07A3C30AD21E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "immersiveTimescale", "immersiveTimescale.vcxproj", "{326F9787-7A21-4CE1-8253-EE56706B1191}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dynamicTimescale", "dynamicTimescale.vcxproj", "{326F9787-7A21-4CE1-8253-EE56706B1191}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
