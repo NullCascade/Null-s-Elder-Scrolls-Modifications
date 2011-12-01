@@ -33,7 +33,12 @@ main(
 	)
 {
 	//  Read initialization file.
-	BYTE keyToggleUI = IniReadInt( CONFIG_FILE, "general", "toggleKey", 0xDD );;
+	BYTE keyToggleUI = IniReadInt( CONFIG_FILE, "general", "toggleKey", 0xDD );
+	BYTE keyScreenshot = IniReadInt( CONFIG_FILE, "screenshot", "screenshot_key", 0x00 );
+	bool turnOffForScreenshots = ( IniReadInt( CONFIG_FILE, "screenshot", "auto_disable", 0 ) ==  1 );
+
+	// Keep track of the menu state.
+	bool menusDisabled = false;
 	
 	// Main plugin loop.
 	while ( true ) {
@@ -41,7 +46,15 @@ main(
 		if ( SafeGetKeyPressed( keyToggleUI ) ) {
 			// Toggle menus/UI, then wait half a second.
 			Debug::ToggleMenus();
+			menusDisabled = !menusDisabled;
 			Wait( 500 );
+		}
+
+		// Taking screenshot?
+		if ( turnOffForScreenshots && !menusDisabled && SafeGetKeyPressed( keyScreenshot ) ) {
+			Debug::ToggleMenus();
+			Wait( 1000 );
+			Debug::ToggleMenus();
 		}
 		
 		// Must be called at the end of execution cycle.
