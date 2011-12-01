@@ -84,7 +84,6 @@ main(
 
 		// Did the timescale change?
 		if ( newTimescale != curTimescale ) {
-			PrintNote( "Debug: Timescale set to %d.", newTimescale );
 			SetTimeScale( newTimescale );
 			curTimescale = newTimescale;
 		}
