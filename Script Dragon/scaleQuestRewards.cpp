@@ -146,8 +146,8 @@ main(
 		if ( forceCheckKey != 0x00 && GetKeyPressed( forceCheckKey ) ) {
 			PrintNote( "Checking for updated items..." );
 			CheckForUpdates();
-			PrintNote( "Update complete." );
 			Wait( 2000 );
+			PrintNote( "Update complete." );
 		}
 
 		// Must be called at the end of execution cycle.
