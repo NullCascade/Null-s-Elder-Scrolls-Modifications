@@ -59,13 +59,13 @@ GetDragonSoulCount(
 }
 
 
-// SetDragonSoulCount - Wrapper for setting the player's dragon soul count.
+// ModDragonSoulCount - Wrapper for modifying the player's dragon soul count.
 void
-SetDragonSoulCount(
-	int i_Count
+ModDragonSoulCount(
+	int i_Change
 	)
 {
-	Actor::ModActorValue( Game::GetPlayer(), "dragonsouls", -GetPerkPointCost() );
+	Actor::ModActorValue( Game::GetPlayer(), "dragonsouls", i_Change );
 }
 
 
@@ -89,8 +89,8 @@ main(
 			int dragonSouls = GetDragonSoulCount();
 
 			// Can we get more perks?
-			if ( perkCount > 200 ) {
-				PrintNote( "Too many perks. Get rid of some and try again." );
+			if ( perkCount == 255 ) {
+				PrintNote( "Error: Too many perks. Get rid of some and try again." );
 				Wait( 1000 );
 			}
 
@@ -102,7 +102,7 @@ main(
 
 			// All's good? Give me my perk!
 			else {
-				SetDragonSoulCount( dragonSouls - perkPointCost );
+				ModDragonSoulCount( -perkPointCost );
 				SetPerkCount( perkCount + 1 );
 				PrintNote( "The souls of %d dragons have granted you a new power.", perkPointCost );
 				Wait( 1000 );
