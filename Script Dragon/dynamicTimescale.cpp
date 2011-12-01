@@ -34,15 +34,20 @@ SetTimeScale(
 }
 
 
+// PlayerInInteriorCell - Checks to see if a player is inside an interior cell.
+bool
+PlayerInInteriorCell(
+	)
+{
+	return Cell::IsInterior( ObjectReference::GetParentCell( (TESObjectREFR*)Game::GetPlayer() ) );
+}
+
+
 // Plugin entry point.
 void
 main(
 	)
 {
-	// Get the player and cell.
-	CActor* player = Game::GetPlayer();
-	TESObjectCELL* playerCell;
-
 	// Get settings.
 	int heartbeat = IniReadInt( CONFIG_FILE, "settings", "heartbeat", 2000 );
 	timescaleMin = IniReadInt( CONFIG_FILE, "settings", "min_timescale", 5 );
@@ -60,14 +65,15 @@ main(
 	// Initial set.
 	SetTimeScale( curTimescale ); 
 
+	// Main execution loop.
 	while ( true ) {
 		// In combat
-		if ( Actor::IsInCombat( player ) ) {
+		if ( Actor::IsInCombat( Game::GetPlayer() ) ) {
 			newTimescale = tsCombat;
 		}
 
 		// Interior
-		else if ( false ) {
+		else if ( PlayerInInteriorCell() ) {
 			newTimescale = tsInterior;
 		}
 
@@ -78,6 +84,7 @@ main(
 
 		// Did the timescale change?
 		if ( newTimescale != curTimescale ) {
+			PrintNote( "Debug: Timescale set to %d.", newTimescale );
 			SetTimeScale( newTimescale );
 			curTimescale = newTimescale;
 		}
