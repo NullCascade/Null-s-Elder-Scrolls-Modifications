@@ -7,8 +7,12 @@
 
 
 // Definitions.
-#define TIMESCALE_MIN 5
-#define TIMESCALE_MAX 60
+#define CONFIG_FILE "dynamicTimescale.ini"
+
+
+// Global variables.
+int timescaleMin = 5;
+int timescaleMax = 60;
 
 
 // SetTimeScale - Sets the time scale.
@@ -18,8 +22,8 @@ SetTimeScale(
 	)
 {
 	// Enforce minimums/maximums.
-	if ( i_Timescale < TIMESCALE_MIN ) i_Timescale = TIMESCALE_MIN;
-	if ( i_Timescale > TIMESCALE_MAX ) i_Timescale = TIMESCALE_MAX;
+	if ( i_Timescale < timescaleMin ) i_Timescale = timescaleMin;
+	if ( i_Timescale > timescaleMax ) i_Timescale = timescaleMax;
 
 	// Build command.
 	char command[64];
@@ -40,15 +44,18 @@ main(
 	TESObjectCELL* playerCell;
 
 	// Get settings.
-	int tsCombat;
-	int tsInterior;
-	int tsDefault;
-	int heartbeat;
+	int heartbeat = IniReadInt( CONFIG_FILE, "settings", "heartbeat", 2000 );
+	timescaleMin = IniReadInt( CONFIG_FILE, "settings", "min_timescale", 5 );
+	timescaleMax = IniReadInt( CONFIG_FILE, "settings", "max_timescale", 60 );
+
+	// Get timescales.
+	int tsDefault = IniReadInt( CONFIG_FILE, "timescale", "default", 20 );
+	int tsCombat = IniReadInt( CONFIG_FILE, "timescale", "combat", tsDefault );
+	int tsInterior = IniReadInt( CONFIG_FILE, "timescale", "interior", tsDefault );
 
 	// Trackers.
 	int curTimescale = tsDefault;
 	int newTimescale = curTimescale;
-	bool wasInCombat = false;
 
 	// Initial set.
 	SetTimeScale( curTimescale ); 

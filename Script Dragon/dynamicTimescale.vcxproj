@@ -10,7 +10,7 @@
     <ProjectGuid>{326F9787-7A21-4CE1-8253-EE56706B1191}</ProjectGuid>
     <RootNamespace>Test</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <ProjectName>immersiveTimescale</ProjectName>
+    <ProjectName>dynamicTimescale</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='main|Win32'" Label="Configuration">
@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='main|Win32'">
     <ClCompile>
-      <Optimization>MinSpace</Optimization>
+      <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;no_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -70,7 +70,7 @@ copy "$(OutDir)$(TargetName)$(TargetExt)" "..\bin"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="common\plugin.cpp" />
-    <ClCompile Include="immersiveTimescale.cpp" />
+    <ClCompile Include="dynamicTimescale.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\enums.h" />
