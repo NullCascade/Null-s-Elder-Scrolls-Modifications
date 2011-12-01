@@ -10,6 +10,23 @@
 #define CONFIG_FILE "scaleQuestRewards.ini"
 
 
+// SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
+bool
+SafeGetKeyPressed(
+	BYTE i_Key
+	)
+{
+	// Don't enable in menu mode.
+	if ( Utility::IsInMenuMode() ) return false;
+
+	// Don't enable if the key is set to 0x00.
+	if ( i_Key == 0x00 ) return false;
+
+	// Otherwise, check as normal.
+	return GetKeyPressed( i_Key );
+}
+
+
 // GetPlayerRef - Returns the player as a TESObjectREFR*.
 TESObjectREFR*
 GetPlayerRef(
@@ -143,7 +160,7 @@ main(
 	// Main plugin loop.
 	while ( true ) {
 		// Allow a force check.
-		if ( forceCheckKey != 0x00 && GetKeyPressed( forceCheckKey ) ) {
+		if ( SafeGetKeyPressed( forceCheckKey ) ) {
 			PrintNote( "Checking for updated items..." );
 			CheckForUpdates();
 			Wait( 2000 );

@@ -16,6 +16,23 @@ int PPC_Level = 0;
 int debugMode = 0;
 
 
+// SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
+bool
+SafeGetKeyPressed(
+	BYTE i_Key
+	)
+{
+	// Don't enable in menu mode.
+	if ( Utility::IsInMenuMode() ) return false;
+
+	// Don't enable if the key is set to 0x00.
+	if ( i_Key == 0x00 ) return false;
+
+	// Otherwise, check as normal.
+	return GetKeyPressed( i_Key );
+}
+
+
 // GetPerkPointCost - Calculates the cost of buying a perk point.
 int
 GetPerkPointCost(
@@ -83,7 +100,7 @@ main(
 	// Main plugin loop.
 	while ( true ) {
 		// Calculate them perk points.
-		if ( !Utility::IsInMenuMode() && GetKeyPressed( keyBuyPerkPoint ) ) {
+		if ( SafeGetKeyPressed( keyBuyPerkPoint ) ) {
 			int perkPointCost = GetPerkPointCost();
 			int perkCount = GetPerkCount();
 			int dragonSouls = GetDragonSoulCount();
