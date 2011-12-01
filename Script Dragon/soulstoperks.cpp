@@ -83,7 +83,7 @@ main(
 	// Main plugin loop.
 	while ( true ) {
 		// Calculate them perk points.
-		if ( GetKeyPressed( keyBuyPerkPoint ) ) {
+		if ( !Utility::IsInMenuMode() && GetKeyPressed( keyBuyPerkPoint ) ) {
 			int perkPointCost = GetPerkPointCost();
 			int perkCount = GetPerkCount();
 			int dragonSouls = GetDragonSoulCount();
