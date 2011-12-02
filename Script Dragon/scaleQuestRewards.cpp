@@ -19,6 +19,9 @@ SafeGetKeyPressed(
 	// Don't enable in menu mode.
 	if ( Utility::IsInMenuMode() ) return false;
 
+	// Are we naming something?
+	if ( *(unsigned int*)( (DWORD)( 0x01565D68 ) ) == 1 ) return false;
+
 	// Don't enable if the key is set to 0x00.
 	if ( i_Key == 0x00 ) return false;
 
