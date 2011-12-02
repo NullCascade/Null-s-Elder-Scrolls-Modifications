@@ -93,7 +93,6 @@ main(
 {
 	// Initialization.
 	BYTE keyBuyPerkPoint = IniReadInt( CONFIG_FILE, "general", "buyKey", 0xDE );
-	debugMode = IniReadInt( CONFIG_FILE, "general", "debug", 0 );
 	PPC_Constant = IniReadInt( CONFIG_FILE, "cost", "constant", PPC_Constant );
 	PPC_Level = IniReadInt( CONFIG_FILE, "cost", "levelMult", PPC_Level );
 
