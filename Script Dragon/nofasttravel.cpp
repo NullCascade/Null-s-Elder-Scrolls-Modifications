@@ -22,7 +22,7 @@ main(
 	// Redisable every heartbeat miliseconds.
 	while ( true ) {
 		Wait(heartbeat);
-		if ( Game::IsFastTravelEnabled() ) Game::EnableFastTravel( false );
+		Game::EnableFastTravel( false );
 		Wait(0);
 	}
 }
