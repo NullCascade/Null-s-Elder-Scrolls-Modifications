@@ -9,7 +9,7 @@
 // Definitions.
 #define CONFIG_FILE "toggleui.ini"
 #define ADDR_DRAW_MENUS		0x0156D500
-
+#define ADDR_HUD_OPAC_SET	0x0156F514
 
 // SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
 bool
@@ -25,6 +25,15 @@ SafeGetKeyPressed(
 
 	// Otherwise, check as normal.
 	return GetKeyPressed( i_Key );
+}
+
+
+// GetHUDOpacity - Reads the HUD opacity value from memory.
+float
+GetHUDOpacity(
+	)
+{
+	return *(float*)( ADDR_HUD_OPAC_SET );
 }
 
 
@@ -50,7 +59,6 @@ SetShowUI(
 	unsigned int i_Value
 	)
 {
-	PrintDebug( "[SD_TOGGLEUI] SetShowUI( %d )", i_Value );
 	*(unsigned char*)( ADDR_DRAW_MENUS ) = i_Value;
 }
 
@@ -61,7 +69,6 @@ SetShowCompass(
 	bool i_Value
 	)
 {
-	PrintDebug( "[SD_TOGGLEUI] SetShowCompass( %d )", i_Value );
 	Utility::SetINIBool( "bShowCompass:interface", i_Value );
 }
 
@@ -72,7 +79,6 @@ SetShowQuestMarkers(
 	bool i_Value
 	)
 {
-	PrintDebug( "[SD_TOGGLEUI] SetShowQuestMarkers( %d )", i_Value );
 	Utility::SetINIBool( "bShowQuestMarkers:gameplay", i_Value );
 }
 
@@ -83,7 +89,6 @@ SetShowFloatingQuestMarkers(
 	bool i_Value
 	)
 {
-	PrintDebug( "[SD_TOGGLEUI] SetShowFloatingQuestMarkers( %d )", i_Value );
 	Utility::SetINIBool( "bShowFloatingQuestMarkers:gameplay", i_Value );
 }
 
@@ -107,7 +112,7 @@ main(
 	SetShowCompass( showCompass );
 	SetShowQuestMarkers( showQuestMarkers );
 	SetShowFloatingQuestMarkers( showFloatingQuestMarkers );
-	SetHUDOpacity( showUI ? 1.0 : 0.0 );
+	SetHUDOpacity( showUI ? GetHUDOpacity() : 0.0 );
 
 	// Handle multiple keys at once.
 	bool keyPressWait = false;
@@ -124,7 +129,7 @@ main(
 		if ( SafeGetKeyPressed( keyToggleUI ) ) {
 			// Toggle menus/UI, then wait half a second.
 			showUI = !showUI;
-			SetHUDOpacity( showUI ? 1.0 : 0.0 );
+			SetHUDOpacity( showUI ? GetHUDOpacity() : 0.0 );
 			keyPressWait = true;
 		}
 
