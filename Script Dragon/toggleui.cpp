@@ -8,8 +8,8 @@
 
 // Definitions.
 #define CONFIG_FILE "toggleui.ini"
-#define ADDR_DRAW_MENUS 0x0156D500
-#define ADDR_HUD_OPACITY 0x13062C7C
+#define ADDR_DRAW_MENUS		0x0156D500
+#define ADDR_HUD_OPACITY	0x13062C7C
 
 
 // SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
@@ -35,8 +35,9 @@ SetHUDOpacity(
 	float i_Value
 	)
 {
+	PrintDebug( "[SD_TOGGLEUI] SetHUDOpacity( %f )", i_Value );
 	Utility::SetINIFloat( "fHUDOpacity", i_Value );
-	*(float*)( ADDR_HUD_OPACITY ) = i_Value;
+	*(float*)( 0x00ADF7AA ) = i_Value;
 }
 
 
@@ -46,6 +47,7 @@ SetShowUI(
 	unsigned int i_Value
 	)
 {
+	PrintDebug( "[SD_TOGGLEUI] SetShowUI( %d )", i_Value );
 	*(unsigned char*)( ADDR_DRAW_MENUS ) = i_Value;
 }
 
@@ -56,6 +58,7 @@ SetShowCompass(
 	bool i_Value
 	)
 {
+	PrintDebug( "[SD_TOGGLEUI] SetShowCompass( %d )", i_Value );
 	Utility::SetINIBool( "bShowCompass:interface", i_Value );
 }
 
@@ -66,6 +69,7 @@ SetShowQuestMarkers(
 	bool i_Value
 	)
 {
+	PrintDebug( "[SD_TOGGLEUI] SetShowQuestMarkers( %d )", i_Value );
 	Utility::SetINIBool( "bShowQuestMarkers:gameplay", i_Value );
 }
 
@@ -76,6 +80,7 @@ SetShowFloatingQuestMarkers(
 	bool i_Value
 	)
 {
+	PrintDebug( "[SD_TOGGLEUI] SetShowFloatingQuestMarkers( %d )", i_Value );
 	Utility::SetINIBool( "bShowFloatingQuestMarkers:gameplay", i_Value );
 }
 
@@ -86,20 +91,20 @@ main(
 	)
 {
 	//  Read initialization file.
-	bool showUI = ( IniReadInt( CONFIG_FILE, "defaults", "show_ui", 1 ) != 0 );
-	bool showCompass = ( IniReadInt( CONFIG_FILE, "defaults", "show_compass", 1 ) != 0 );
-	bool showQuestMarkers = ( IniReadInt( CONFIG_FILE, "defaults", "show_quest_markers", 1 ) != 0 );
-	bool showFloatingQuestMarkers = ( IniReadInt( CONFIG_FILE, "defaults", "show_float_quest_markers", 1 ) != 0 );
-	BYTE keyToggleUI = IniReadInt( CONFIG_FILE, "keys", "toggle_ui", 0x00 );
-	BYTE keyToggleCompass = IniReadInt( CONFIG_FILE, "keys", "toggle_compass", 0x00 );
-	BYTE keyToggleQuestMarkers = ( IniReadInt( CONFIG_FILE, "defaults", "show_quest_markers", 1 ) != 0 );
-	BYTE keyToggleFloatingQuestMarkers = IniReadInt( CONFIG_FILE, "keys", "toggle_float_quest_markers", 0x00 );
+	bool showUI = ( IniReadInt( CONFIG_FILE, "defaults", "ui", 1 ) != 0 );
+	bool showCompass = ( IniReadInt( CONFIG_FILE, "defaults", "compass", 1 ) != 0 );
+	bool showQuestMarkers = ( IniReadInt( CONFIG_FILE, "defaults", "quest_markers", 1 ) != 0 );
+	bool showFloatingQuestMarkers = ( IniReadInt( CONFIG_FILE, "defaults", "float_quest_markers", 1 ) != 0 );
+	BYTE keyToggleUI = IniReadInt( CONFIG_FILE, "keys", "ui", 0x00 );
+	BYTE keyToggleCompass = IniReadInt( CONFIG_FILE, "keys", "compass", 0x00 );
+	BYTE keyToggleQuestMarkers = ( IniReadInt( CONFIG_FILE, "keys", "quest_markers", 1 ) != 0 );
+	BYTE keyToggleFloatingQuestMarkers = IniReadInt( CONFIG_FILE, "keys", "float_quest_markers", 0x00 );
 
 	// Keep track of the menu state.
 	SetShowCompass( showCompass );
 	SetShowQuestMarkers( showQuestMarkers );
 	SetShowFloatingQuestMarkers( showFloatingQuestMarkers );
-	SetHUDOpacity( showUI ? 1.0 : 0.0 );
+	SetShowUI( showUI );
 
 	// Handle multiple keys at once.
 	bool keyPressWait = false;
@@ -116,7 +121,7 @@ main(
 		if ( SafeGetKeyPressed( keyToggleUI ) ) {
 			// Toggle menus/UI, then wait half a second.
 			showUI = !showUI;
-			SetHUDOpacity( showUI ? 1.0 : 0.0 );
+			SetShowUI( showUI );
 			keyPressWait = true;
 		}
 
@@ -130,7 +135,7 @@ main(
 		// Enable/disable quest markers.
 		if ( SafeGetKeyPressed( keyToggleQuestMarkers ) ) {
 			showQuestMarkers = !showQuestMarkers;
-			SetShowFloatingQuestMarkers( showQuestMarkers );
+			SetShowQuestMarkers( showQuestMarkers );
 			keyPressWait = true;
 		}
 
