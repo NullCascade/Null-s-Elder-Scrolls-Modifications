@@ -7,13 +7,13 @@
 
 
 // Definitions.
-#define CONFIG_FILE "soulstoperks.ini"
+#define CONFIG_FILE			"soulstoperks.ini"
+#define ADDR_IS_RENAMING	0x01592028
 
 
 // Costs.
 int PPC_Constant = 10;
 int PPC_Level = 0;
-int debugMode = 0;
 
 
 // SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
@@ -26,7 +26,7 @@ SafeGetKeyPressed(
 	if ( Utility::IsInMenuMode() ) return false;
 
 	// Are we naming something?
-	if ( *(unsigned int*)( (DWORD)( 0x01565D68 ) ) == 1 ) return false;
+	if ( *(unsigned int*)( (DWORD)( ADDR_IS_RENAMING ) ) == 1 ) return false;
 
 	// Don't enable if the key is set to 0x00.
 	if ( i_Key == 0x00 ) return false;
