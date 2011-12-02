@@ -9,6 +9,7 @@
 // Definitions.
 #define CONFIG_FILE "toggleui.ini"
 #define ADDR_DRAW_MENUS 0x0156D500
+#define ADDR_HUD_OPACITY 0x13062C7C
 
 
 // SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
@@ -35,6 +36,7 @@ SetHUDOpacity(
 	)
 {
 	Utility::SetINIFloat( "fHUDOpacity", i_Value );
+	*(float*)( ADDR_HUD_OPACITY ) = i_Value;
 }
 
 
@@ -97,7 +99,7 @@ main(
 	SetShowCompass( showCompass );
 	SetShowQuestMarkers( showQuestMarkers );
 	SetShowFloatingQuestMarkers( showFloatingQuestMarkers );
-	SetShowUI( showUI );
+	SetHUDOpacity( showUI ? 1.0 : 0.0 );
 
 	// Handle multiple keys at once.
 	bool keyPressWait = false;
@@ -114,7 +116,7 @@ main(
 		if ( SafeGetKeyPressed( keyToggleUI ) ) {
 			// Toggle menus/UI, then wait half a second.
 			showUI = !showUI;
-			SetShowUI( showUI );
+			SetHUDOpacity( showUI ? 1.0 : 0.0 );
 			keyPressWait = true;
 		}
 
