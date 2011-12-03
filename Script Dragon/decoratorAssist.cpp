@@ -45,7 +45,8 @@ main(
 	BYTE keyMoveYNeg = IniReadInt( CONFIG_FILE, "settings", "key_y_neg", 0x00 );
 	BYTE keyMoveZPos = IniReadInt( CONFIG_FILE, "settings", "key_z_pos", 0x00 );
 	BYTE keyMoveZNeg = IniReadInt( CONFIG_FILE, "settings", "key_z_neg", 0x00 );
-	float moveChangeValue = IniReadInt( CONFIG_FILE, "movement", "move_amount", 1 ) / 100;
+	float moveChangeValue = IniReadInt( CONFIG_FILE, "settings", "move_amount", 1 ) / 100;
+	float rotChangeValue = IniReadInt( CONFIG_FILE, "settings", "rotate_amount", 1 );
 
 	// Assistance mode?
 	bool assistMode = false;
@@ -115,27 +116,27 @@ main(
 			// Are we rotating?
 			if ( SafeGetKeyPressed( KEY_LEFT_CONTROL ) ) {
 				if ( SafeGetKeyPressed( keyMoveXPos ) ) {
-					rotX += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue : moveChangeValue * 10;
+					rotX += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? rotChangeValue * 10 : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveXNeg ) ) {
-					rotX -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue : moveChangeValue * 10;
+					rotX -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? rotChangeValue * 10 : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveYPos ) ) {
-					rotY += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue : moveChangeValue * 10;
+					rotY += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? rotChangeValue * 10 : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveYNeg ) ) {
-					rotY -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue : moveChangeValue * 10;
+					rotY -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? rotChangeValue * 10 : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZPos ) ) {
-					rotZ += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue : moveChangeValue * 10;
+					rotZ += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? rotChangeValue * 10 : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZNeg ) ) {
-					rotZ -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue : moveChangeValue * 10;
+					rotZ -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? rotChangeValue * 10 : rotChangeValue;
 					rotated = true;
 				}
 			}
@@ -143,27 +144,27 @@ main(
 			// No? Then we're moving.
 			else {
 				if ( SafeGetKeyPressed( keyMoveXPos ) ) {
-					posX += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue : moveChangeValue * 10;
+					posX += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue * 10 : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveXNeg ) ) {
-					posX -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue : moveChangeValue * 10;
+					posX -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue * 10 : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveYPos ) ) {
-					posY += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue : moveChangeValue * 10;
+					posY += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue * 10 : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveYNeg ) ) {
-					posY -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue : moveChangeValue * 10;
+					posY -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue * 10 : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZPos ) ) {
-					posZ += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue : moveChangeValue * 10;
+					posZ += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue * 10 : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZNeg ) ) {
-					posZ -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue : moveChangeValue * 10;
+					posZ -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue * 10 : moveChangeValue;
 					moved = true;
 				}
 			}
