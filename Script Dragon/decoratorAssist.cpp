@@ -10,10 +10,39 @@
 #define CONFIG_FILE "decoratorAssist.ini"
 #define ADDR_IS_RENAMING	0x01592028
 
+
+// Globals.
+int valMulti = 0;
+int moveChangeValue = 0;
+int rotChangeValue = 0;
+int delay = 0;
+BYTE keyDecorate = 0x00;
+BYTE keyRotate = 0x00;
+BYTE keyMulti = 0x00;
+BYTE keyMoveXPos = 0x00;
+BYTE keyMoveXNeg = 0x00;
+BYTE keyMoveYPos = 0x00;
+BYTE keyMoveYNeg = 0x00;
+BYTE keyMoveZPos = 0x00;
+BYTE keyMoveZNeg = 0x00;
+bool assistMode = false;
+float posX = 0.0f;
+float posY = 0.0f;
+float posZ = 0.0f;
+float rotX = 0.0f;
+float rotY = 0.0f;
+float rotZ = 0.0f;
+TESObjectREFR* grabbedObj = NULL;
+TESObjectCELL* currentCell = NULL;
+
+
 // SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
 bool
 SafeGetKeyPressed(
-	BYTE i_Key
+	BYTE i_Key,
+	bool i_Control = false,
+	bool i_Shift = false,
+	bool i_Alt = false
 	)
 {
 	// Don't enable in menu mode.
@@ -25,8 +54,105 @@ SafeGetKeyPressed(
 	// Don't enable if the key is set to 0x00.
 	if ( i_Key == 0x00 ) return false;
 
+	// Are the control keys pressed?
+	if ( i_Control && !GetKeyPressed( 0xA2 ) ) return false;
+	if ( i_Shift && !GetKeyPressed( 0xA0 ) ) return false;
+	if ( i_Alt && !GetKeyPressed( 0xA4 ) ) return false;
+
 	// Otherwise, check as normal.
 	return GetKeyPressed( i_Key );
+}
+
+// EnableDecorationMode
+bool
+EnableDecorationMode(
+	)
+{
+	// Are we even in decoration mode?
+	if ( assistMode ) return true;
+
+	// Get held object.
+	TESObjectREFR* grabbedObjTmp = Game::GetPlayerGrabbedRef();
+	if ( grabbedObjTmp == NULL ) return false;
+
+	// Wait for the player to release the object.
+	PrintNote( "Release the object to decorate." );
+	while ( Game::GetPlayerGrabbedRef() != NULL ) {
+		Wait( 10 );
+	}
+
+	// Enter assist mode.
+	assistMode = true;
+	PrintNote( "Decorator mode enabled." );
+	Debug::ToggleCollisions();
+	ObjectReference::BlockActivation( grabbedObj, true );
+	grabbedObj = grabbedObjTmp;
+	currentCell = ObjectReference::GetParentCell( (TESObjectREFR*)Game::GetPlayer() );
+
+	// Get position.
+	posX = ObjectReference::GetPositionX( grabbedObj );
+	posY = ObjectReference::GetPositionY( grabbedObj );
+	posZ = ObjectReference::GetPositionZ( grabbedObj );
+
+	// Get rotation.
+	rotX = ObjectReference::GetAngleX( grabbedObj );
+	rotY = ObjectReference::GetAngleY( grabbedObj );
+	rotZ = ObjectReference::GetAngleZ( grabbedObj );
+
+	return assistMode;
+}
+
+
+// DisableDecorationMode
+bool
+DisableDecorationMode(
+	)
+{
+	// Are we even in decoration mode?
+	if ( !assistMode ) return false;
+
+	// Disable.
+	assistMode = false;
+	PrintNote( "Decorator mode disabled." );
+	Debug::ToggleCollisions();
+	ObjectReference::BlockActivation( grabbedObj, false );
+	grabbedObj = NULL;
+
+	// Reset position data.
+	posX = 0.0f;	rotX = 0.0f;
+	posY = 0.0f;	rotY = 0.0f;
+	posZ = 0.0f;	rotZ = 0.0f;
+
+	// Wait between key presses so it won't quickly re-enable.
+	Wait( 250 );
+
+	return assistMode;
+}
+
+
+// ShouldExitDecorationMode - Returns true if 
+bool
+ShouldExitDecorationMode(
+	)
+{
+	// Are we even in decoration mode?
+	if ( !assistMode ) return false;
+
+	// Get the actor.
+	CActor* player = Game::GetPlayer();
+	if ( player == NULL ) return true;
+
+	// In combat?
+	if ( Actor::IsInCombat( player ) ) return true;
+
+	// In menu mode?
+	if ( Utility::IsInMenuMode() ) return true;
+
+	// Changed area?
+	if ( currentCell != ObjectReference::GetParentCell( (TESObjectREFR*)Game::GetPlayer() ) ) return true;
+
+	// All's good?
+	return false;
 }
 
 
@@ -36,29 +162,19 @@ main(
 	)
 {
 	//  Read initialization file.
-	int valMulti = IniReadInt( CONFIG_FILE, "settings", "multi_value", 10 );
-	int moveChangeValue = IniReadInt( CONFIG_FILE, "settings", "move_amount", 1 ) / 100;
-	int rotChangeValue = IniReadInt( CONFIG_FILE, "settings", "rotate_amount", 1 );
-	int delay = IniReadInt( CONFIG_FILE, "settings", "delay", 10 );
-	BYTE keyDecorate = IniReadInt( CONFIG_FILE, "keys", "key_decorate", 0x00 );
-	BYTE keyRotate = IniReadInt( CONFIG_FILE, "keys", "key_rotate", 0x00 );
-	BYTE keyMulti = IniReadInt( CONFIG_FILE, "keys", "key_multi", 0x00 );
-	BYTE keyMoveXPos = IniReadInt( CONFIG_FILE, "keys", "key_x_pos", 0x00 );
-	BYTE keyMoveXNeg = IniReadInt( CONFIG_FILE, "keys", "key_x_neg", 0x00 );
-	BYTE keyMoveYPos = IniReadInt( CONFIG_FILE, "keys", "key_y_pos", 0x00 );
-	BYTE keyMoveYNeg = IniReadInt( CONFIG_FILE, "keys", "key_y_neg", 0x00 );
-	BYTE keyMoveZPos = IniReadInt( CONFIG_FILE, "keys", "key_z_pos", 0x00 );
-	BYTE keyMoveZNeg = IniReadInt( CONFIG_FILE, "keys", "key_z_neg", 0x00 );
-
-	// Assistance mode?
-	bool assistMode = false;
-	TESObjectREFR* grabbedObj = NULL;
-	float posX = 0.0f;
-	float posY = 0.0f;
-	float posZ = 0.0f;
-	float rotX = 0.0f;
-	float rotY = 0.0f;
-	float rotZ = 0.0f;
+	valMulti = IniReadInt( CONFIG_FILE, "settings", "multi_value", 10 );
+	moveChangeValue = IniReadInt( CONFIG_FILE, "settings", "move_amount", 1 ) / 100;
+	rotChangeValue = IniReadInt( CONFIG_FILE, "settings", "rotate_amount", 1 );
+	delay = IniReadInt( CONFIG_FILE, "settings", "delay", 10 );
+	keyDecorate = IniReadInt( CONFIG_FILE, "keys", "key_decorate", 0x00 );
+	keyRotate = IniReadInt( CONFIG_FILE, "keys", "key_rotate", 0x00 );
+	keyMulti = IniReadInt( CONFIG_FILE, "keys", "key_multi", 0x00 );
+	keyMoveXPos = IniReadInt( CONFIG_FILE, "keys", "key_x_pos", 0x00 );
+	keyMoveXNeg = IniReadInt( CONFIG_FILE, "keys", "key_x_neg", 0x00 );
+	keyMoveYPos = IniReadInt( CONFIG_FILE, "keys", "key_y_pos", 0x00 );
+	keyMoveYNeg = IniReadInt( CONFIG_FILE, "keys", "key_y_neg", 0x00 );
+	keyMoveZPos = IniReadInt( CONFIG_FILE, "keys", "key_z_pos", 0x00 );
+	keyMoveZNeg = IniReadInt( CONFIG_FILE, "keys", "key_z_neg", 0x00 );
 	
 	// Main plugin loop.
 	while ( true ) {
@@ -69,46 +185,17 @@ main(
 
 			// Disabling decoration mode?
 			if ( assistMode ) {
-				// Exit assist mode.
-				assistMode = false;
-				PrintNote( "Decorator mode disabled." );
-				Debug::ToggleCollisions();
-				grabbedObj = NULL;
-
-				// Reset position data.
-				posX = 0.0f;	rotX = 0.0f;
-				posY = 0.0f;	rotY = 0.0f;
-				posZ = 0.0f;	rotZ = 0.0f;
-
-				// Wait between key presses so it won't quickly re-enable.
-				Wait( 250 );
+				DisableDecorationMode();
 			}
 
 			// Are we enabling decoration mode?
 			else if ( grabbedObjTmp != NULL ) {
-				// Wait for the player to release the object.
-				PrintNote( "Release the object to decorate." );
-				while ( Game::GetPlayerGrabbedRef() != NULL ) {
-					Wait( 10 );
-				}
-
-				// Enter assist mode.
-				assistMode = true;
-				PrintNote( "Decorator mode enabled." );
-				Debug::ToggleCollisions();
-				grabbedObj = grabbedObjTmp;
-
-				// Get position.
-				posX = ObjectReference::GetPositionX( grabbedObj );
-				posY = ObjectReference::GetPositionY( grabbedObj );
-				posZ = ObjectReference::GetPositionZ( grabbedObj );
-
-				// Get rotation.
-				rotX = ObjectReference::GetAngleX( grabbedObj );
-				rotY = ObjectReference::GetAngleY( grabbedObj );
-				rotZ = ObjectReference::GetAngleZ( grabbedObj );
+				EnableDecorationMode();
 			}
 		}
+
+		// Is it safe to still be in assist mode?
+		if ( assistMode && ShouldExitDecorationMode() ) DisableDecorationMode();
 
 		// Are we assisting?
 		if ( assistMode ) {
@@ -166,7 +253,7 @@ main(
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZNeg ) ) {
-					posZ -= ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * 10 : moveChangeValue;
+					posZ -= ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * valMulti : moveChangeValue;
 					moved = true;
 				}
 			}
