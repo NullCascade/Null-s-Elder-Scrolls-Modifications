@@ -14,13 +14,14 @@
 // SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
 bool
 SafeGetKeyPressed(
-	BYTE i_Key
+	BYTE i_Key,
+	bool i_AllowMenuMode = false
 	)
 {
-	// Don't enable in menu mode.
-	if ( Utility::IsInMenuMode() ) return false;
+	// Menu mode check.
+	if ( !i_AllowMenuMode && Utility::IsInMenuMode() ) return false;
 
-	// Are we naming something?
+	// Renaming an enchantment.
 	if ( *(unsigned int*)( (DWORD)( ADDR_IS_RENAMING ) ) == 1 ) return false;
 
 	// Don't enable if the key is set to 0x00.
