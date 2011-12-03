@@ -7,21 +7,23 @@
 
 
 // Definitions.
-#define CONFIG_FILE "toggleui.ini"
-#define ADDR_DRAW_MENUS		0x0156D500
-#define ADDR_HUD_OPAC_SET	0x0156F514
+#define CONFIG_FILE			"toggleui.ini"
+#define ADDR_DRAW_MENUS		0x015997D0
+#define ADDR_HUD_OPAC_SET	0x0159BCAC
+#define ADDR_IS_RENAMING	0x01592028
 
 // SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
 bool
 SafeGetKeyPressed(
-	BYTE i_Key
+	BYTE i_Key,
+	bool i_AllowMenuMode = false
 	)
 {
-	// Don't enable in menu mode.
-	if ( Utility::IsInMenuMode() ) return false;
+	// Menu mode check.
+	if ( !i_AllowMenuMode && Utility::IsInMenuMode() ) return false;
 
-	// Are we naming something?
-	if ( *(unsigned int*)( (DWORD)( 0x01565D68 ) ) == 1 ) return false;
+	// Renaming an enchantment.
+	if ( *(unsigned int*)( (DWORD)( ADDR_IS_RENAMING ) ) == 1 ) return false;
 
 	// Don't enable if the key is set to 0x00.
 	if ( i_Key == 0x00 ) return false;
