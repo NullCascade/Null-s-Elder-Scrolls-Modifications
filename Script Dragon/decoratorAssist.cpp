@@ -118,27 +118,27 @@ main(
 			// Are we rotating?
 			if ( SafeGetKeyPressed( keyRotate ) ) {
 				if ( SafeGetKeyPressed( keyMoveXPos ) ) {
-					rotX += ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * 10 : rotChangeValue;
+					rotX += ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * valMulti : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveXNeg ) ) {
-					rotX -= ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * 10 : rotChangeValue;
+					rotX -= ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * valMulti : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveYPos ) ) {
-					rotY += ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * 10 : rotChangeValue;
+					rotY += ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * valMulti : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveYNeg ) ) {
-					rotY -= ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * 10 : rotChangeValue;
+					rotY -= ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * valMulti : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZPos ) ) {
-					rotZ += ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * 10 : rotChangeValue;
+					rotZ += ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * valMulti : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZNeg ) ) {
-					rotZ -= ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * 10 : rotChangeValue;
+					rotZ -= ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * valMulti : rotChangeValue;
 					rotated = true;
 				}
 			}
@@ -146,23 +146,23 @@ main(
 			// No? Then we're moving.
 			else {
 				if ( SafeGetKeyPressed( keyMoveXPos ) ) {
-					posX += ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * 10 : moveChangeValue;
+					posX += ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * valMulti : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveXNeg ) ) {
-					posX -= ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * 10 : moveChangeValue;
+					posX -= ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * valMulti : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveYPos ) ) {
-					posY += ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * 10 : moveChangeValue;
+					posY += ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * valMulti : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveYNeg ) ) {
-					posY -= ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * 10 : moveChangeValue;
+					posY -= ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * valMulti : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZPos ) ) {
-					posZ += ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * 10 : moveChangeValue;
+					posZ += ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * valMulti : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZNeg ) ) {
