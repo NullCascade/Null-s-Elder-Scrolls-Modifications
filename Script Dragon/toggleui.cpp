@@ -8,9 +8,9 @@
 
 // Definitions.
 #define CONFIG_FILE			"toggleui.ini"
-#define ADDR_IS_RENAMING	0x01592028
 #define ADDR_DRAW_MENUS		0x015997D0
 #define ADDR_HUD_OPAC_SET	0x0159BCAC
+#define ADDR_IS_RENAMING	0x01592028
 
 // SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
 bool
@@ -48,7 +48,7 @@ SetHUDOpacity(
 	float i_Value
 	)
 {
-	DWORD dwPtr = *(PDWORD)( 0x1565CDC );
+	DWORD dwPtr = *(PDWORD)( 0x1591F9C );
 	dwPtr = *(PDWORD)( dwPtr + 0x4 );
 	dwPtr = *(PDWORD)( dwPtr + 0x2C );
 	dwPtr = *(PDWORD)( dwPtr + 0x4 );
