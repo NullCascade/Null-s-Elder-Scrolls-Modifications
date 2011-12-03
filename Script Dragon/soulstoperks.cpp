@@ -8,7 +8,8 @@
 
 // Definitions.
 #define CONFIG_FILE			"soulstoperks.ini"
-#define ADDR_IS_RENAMING	0x01592028
+#define ADDR_IS_RENAMING	0x1592028
+#define OFFS_PERK_COUNT		0x6c9
 
 
 // Costs.
@@ -57,7 +58,7 @@ unsigned char
 GetPerkCount(
 	) 
 {
-	return *(unsigned char*)( (DWORD)( Game::GetPlayer() ) + 0x6D1 );
+	return *(unsigned char*)( (DWORD)( Game::GetPlayer() ) + OFFS_PERK_COUNT );
 }
 
 
@@ -67,7 +68,7 @@ SetPerkCount(
 	unsigned char i_Count
 	)
 {
-	*(unsigned char*)( (DWORD)( Game::GetPlayer() ) + 0x6D1 ) = i_Count;
+	*(unsigned char*)( (DWORD)( Game::GetPlayer() ) + OFFS_PERK_COUNT ) = i_Count;
 }
 
 
