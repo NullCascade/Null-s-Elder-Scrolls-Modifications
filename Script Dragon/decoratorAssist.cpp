@@ -9,8 +9,6 @@
 // Definitions.
 #define CONFIG_FILE "decoratorAssist.ini"
 #define ADDR_IS_RENAMING	0x01592028
-#define KEY_LEFT_SHIFT		0xA0
-#define KEY_LEFT_CONTROL	0xA2
 
 // SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
 bool
@@ -38,15 +36,19 @@ main(
 	)
 {
 	//  Read initialization file.
-	BYTE keyDecorate = IniReadInt( CONFIG_FILE, "settings", "key_decorate", 0x00 );
-	BYTE keyMoveXPos = IniReadInt( CONFIG_FILE, "settings", "key_x_pos", 0x00 );
-	BYTE keyMoveXNeg = IniReadInt( CONFIG_FILE, "settings", "key_x_neg", 0x00 );
-	BYTE keyMoveYPos = IniReadInt( CONFIG_FILE, "settings", "key_y_pos", 0x00 );
-	BYTE keyMoveYNeg = IniReadInt( CONFIG_FILE, "settings", "key_y_neg", 0x00 );
-	BYTE keyMoveZPos = IniReadInt( CONFIG_FILE, "settings", "key_z_pos", 0x00 );
-	BYTE keyMoveZNeg = IniReadInt( CONFIG_FILE, "settings", "key_z_neg", 0x00 );
-	float moveChangeValue = IniReadInt( CONFIG_FILE, "settings", "move_amount", 1 ) / 100;
-	float rotChangeValue = IniReadInt( CONFIG_FILE, "settings", "rotate_amount", 1 );
+	int valMulti = IniReadInt( CONFIG_FILE, "settings", "multi_value", 10 );
+	int moveChangeValue = IniReadInt( CONFIG_FILE, "settings", "move_amount", 1 ) / 100;
+	int rotChangeValue = IniReadInt( CONFIG_FILE, "settings", "rotate_amount", 1 );
+	int delay = IniReadInt( CONFIG_FILE, "settings", "delay", 10 );
+	BYTE keyDecorate = IniReadInt( CONFIG_FILE, "keys", "key_decorate", 0x00 );
+	BYTE keyRotate = IniReadInt( CONFIG_FILE, "keys", "key_rotate", 0x00 );
+	BYTE keyMulti = IniReadInt( CONFIG_FILE, "keys", "key_multi", 0x00 );
+	BYTE keyMoveXPos = IniReadInt( CONFIG_FILE, "keys", "key_x_pos", 0x00 );
+	BYTE keyMoveXNeg = IniReadInt( CONFIG_FILE, "keys", "key_x_neg", 0x00 );
+	BYTE keyMoveYPos = IniReadInt( CONFIG_FILE, "keys", "key_y_pos", 0x00 );
+	BYTE keyMoveYNeg = IniReadInt( CONFIG_FILE, "keys", "key_y_neg", 0x00 );
+	BYTE keyMoveZPos = IniReadInt( CONFIG_FILE, "keys", "key_z_pos", 0x00 );
+	BYTE keyMoveZNeg = IniReadInt( CONFIG_FILE, "keys", "key_z_neg", 0x00 );
 
 	// Assistance mode?
 	bool assistMode = false;
@@ -114,29 +116,29 @@ main(
 			bool rotated = false;
 
 			// Are we rotating?
-			if ( SafeGetKeyPressed( KEY_LEFT_CONTROL ) ) {
+			if ( SafeGetKeyPressed( keyRotate ) ) {
 				if ( SafeGetKeyPressed( keyMoveXPos ) ) {
-					rotX += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? rotChangeValue * 10 : rotChangeValue;
+					rotX += ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * 10 : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveXNeg ) ) {
-					rotX -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? rotChangeValue * 10 : rotChangeValue;
+					rotX -= ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * 10 : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveYPos ) ) {
-					rotY += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? rotChangeValue * 10 : rotChangeValue;
+					rotY += ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * 10 : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveYNeg ) ) {
-					rotY -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? rotChangeValue * 10 : rotChangeValue;
+					rotY -= ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * 10 : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZPos ) ) {
-					rotZ += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? rotChangeValue * 10 : rotChangeValue;
+					rotZ += ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * 10 : rotChangeValue;
 					rotated = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZNeg ) ) {
-					rotZ -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? rotChangeValue * 10 : rotChangeValue;
+					rotZ -= ( SafeGetKeyPressed( keyMulti ) ) ? rotChangeValue * 10 : rotChangeValue;
 					rotated = true;
 				}
 			}
@@ -144,27 +146,27 @@ main(
 			// No? Then we're moving.
 			else {
 				if ( SafeGetKeyPressed( keyMoveXPos ) ) {
-					posX += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue * 10 : moveChangeValue;
+					posX += ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * 10 : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveXNeg ) ) {
-					posX -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue * 10 : moveChangeValue;
+					posX -= ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * 10 : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveYPos ) ) {
-					posY += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue * 10 : moveChangeValue;
+					posY += ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * 10 : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveYNeg ) ) {
-					posY -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue * 10 : moveChangeValue;
+					posY -= ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * 10 : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZPos ) ) {
-					posZ += ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue * 10 : moveChangeValue;
+					posZ += ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * 10 : moveChangeValue;
 					moved = true;
 				}
 				if ( SafeGetKeyPressed( keyMoveZNeg ) ) {
-					posZ -= ( SafeGetKeyPressed( KEY_LEFT_SHIFT ) ) ? moveChangeValue * 10 : moveChangeValue;
+					posZ -= ( SafeGetKeyPressed( keyMulti ) ) ? moveChangeValue * 10 : moveChangeValue;
 					moved = true;
 				}
 			}
@@ -172,7 +174,7 @@ main(
 			// Update the location and rotation.
 			if ( moved ) ObjectReference::SetPosition( grabbedObj, posX, posY, posZ );
 			if ( rotated ) ObjectReference::SetAngle( grabbedObj, rotX, rotY, rotZ );
-			Wait( 10 );
+			Wait( delay );
 		}
 
 		// Must be called at the end of execution cycle.
