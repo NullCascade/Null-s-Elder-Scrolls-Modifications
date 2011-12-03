@@ -7,10 +7,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B93D0D72-95FE-432D-91C4-AEB184268A31}</ProjectGuid>
+    <ProjectGuid>{3C863441-C554-439F-B633-288864A6F102}</ProjectGuid>
     <RootNamespace>Test</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <ProjectName>scaleQuestRewards</ProjectName>
+    <ProjectName>decoratorAssist</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='main|Win32'" Label="Configuration">
@@ -67,14 +67,10 @@
       <Command>md "..\bin"
 copy "$(OutDir)$(TargetName)$(TargetExt)" "..\bin"</Command>
     </PostBuildEvent>
-    <PreBuildEvent>
-      <Command>
-      </Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="common\plugin.cpp" />
-    <ClCompile Include="scaleQuestRewards.cpp" />
+    <ClCompile Include="decoratorAssist.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\enums.h" />

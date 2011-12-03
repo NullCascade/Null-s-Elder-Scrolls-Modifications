@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dynamicTimescale", "dynamic
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "scaleQuestRewards", "scaleQuestRewards.vcxproj", "{B93D0D72-95FE-432D-91C4-AEB184268A31}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "decoratorAssist", "decoratorAssist.vcxproj", "{3C863441-C554-439F-B633-288864A6F102}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		main|Win32 = main|Win32
@@ -26,6 +28,8 @@ Global
 		{326F9787-7A21-4CE1-8253-EE56706B1191}.main|Win32.Build.0 = main|Win32
 		{B93D0D72-95FE-432D-91C4-AEB184268A31}.main|Win32.ActiveCfg = main|Win32
 		{B93D0D72-95FE-432D-91C4-AEB184268A31}.main|Win32.Build.0 = main|Win32
+		{3C863441-C554-439F-B633-288864A6F102}.main|Win32.ActiveCfg = main|Win32
+		{3C863441-C554-439F-B633-288864A6F102}.main|Win32.Build.0 = main|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
