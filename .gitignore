@@ -34,6 +34,13 @@ SKSE/skse/UpgradeLog.XML
 SKSE/skse/ipch/*
 SKSE/skse/*
 *.sdf
-Script Dragon/common/*
 tmp/*
 *.opensdf
+Script Dragon/common/enums.h
+Script Dragon/common/invoke.h
+Script Dragon/common/obscript.h
+Script Dragon/common/plugin.cpp
+Script Dragon/common/plugin.def
+Script Dragon/common/plugin.h
+Script Dragon/common/types.h
+Script Dragon/common/skyscript.h

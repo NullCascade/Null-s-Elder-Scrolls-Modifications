@@ -4,32 +4,11 @@
 #include "common\types.h"
 #include "common\enums.h"
 #include "common\plugin.h"
+#include "common\nullCommon.h"
 
 
 // Definitions.
 #define CONFIG_FILE			"scaleQuestRewards.ini"
-#define ADDR_IS_RENAMING	0x01592028
-
-
-// SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
-bool
-SafeGetKeyPressed(
-	BYTE i_Key,
-	bool i_AllowMenuMode = false
-	)
-{
-	// Menu mode check.
-	if ( !i_AllowMenuMode && Utility::IsInMenuMode() ) return false;
-
-	// Renaming an enchantment.
-	if ( *(unsigned int*)( (DWORD)( ADDR_IS_RENAMING ) ) == 1 ) return false;
-
-	// Don't enable if the key is set to 0x00.
-	if ( i_Key == 0x00 ) return false;
-
-	// Otherwise, check as normal.
-	return GetKeyPressed( i_Key );
-}
 
 
 // GetPlayerRef - Returns the player as a TESObjectREFR*.
@@ -165,7 +144,7 @@ main(
 	// Main plugin loop.
 	while ( true ) {
 		// Allow a force check.
-		if ( SafeGetKeyPressed( forceCheckKey ) ) {
+		if ( IO::SafeGetKeyPressed( forceCheckKey ) ) {
 			PrintNote( "Checking for updated items..." );
 			CheckForUpdates();
 			Wait( 2000 );

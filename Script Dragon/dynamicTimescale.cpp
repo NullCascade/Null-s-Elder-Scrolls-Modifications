@@ -4,6 +4,7 @@
 #include "common\types.h"
 #include "common\enums.h"
 #include "common\plugin.h"
+#include "common\nullCommon.h"
 
 
 // Definitions.

@@ -4,38 +4,16 @@
 #include "common\types.h"
 #include "common\enums.h"
 #include "common\plugin.h"
-
+#include "common\nullCommon.h"
 
 // Definitions.
 #define CONFIG_FILE			"soulstoperks.ini"
-#define ADDR_IS_RENAMING	0x1592028
 #define OFFS_PERK_COUNT		0x6c9
 
 
 // Costs.
 int PPC_Constant = 10;
 int PPC_Level = 0;
-
-
-// SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
-bool
-SafeGetKeyPressed(
-	BYTE i_Key,
-	bool i_AllowMenuMode = false
-	)
-{
-	// Menu mode check.
-	if ( !i_AllowMenuMode && Utility::IsInMenuMode() ) return false;
-
-	// Renaming an enchantment.
-	if ( *(unsigned int*)( (DWORD)( ADDR_IS_RENAMING ) ) == 1 ) return false;
-
-	// Don't enable if the key is set to 0x00.
-	if ( i_Key == 0x00 ) return false;
-
-	// Otherwise, check as normal.
-	return GetKeyPressed( i_Key );
-}
 
 
 // GetPerkPointCost - Calculates the cost of buying a perk point.
@@ -104,7 +82,7 @@ main(
 	// Main plugin loop.
 	while ( true ) {
 		// Calculate them perk points.
-		if ( SafeGetKeyPressed( keyBuyPerkPoint ) ) {
+		if ( IO::SafeGetKeyPressed( keyBuyPerkPoint ) ) {
 			int perkPointCost = GetPerkPointCost();
 			int perkCount = GetPerkCount();
 			int dragonSouls = GetDragonSoulCount();
