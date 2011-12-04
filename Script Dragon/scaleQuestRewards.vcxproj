@@ -73,12 +73,14 @@ copy "$(OutDir)$(TargetName)$(TargetExt)" "..\bin"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="common\nullCommon.cpp" />
     <ClCompile Include="common\plugin.cpp" />
     <ClCompile Include="scaleQuestRewards.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\enums.h" />
     <ClInclude Include="common\invoke.h" />
+    <ClInclude Include="common\nullCommon.h" />
     <ClInclude Include="common\obscript.h" />
     <ClInclude Include="common\plugin.h" />
     <ClInclude Include="common\skyscript.h" />
