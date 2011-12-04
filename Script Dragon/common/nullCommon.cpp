@@ -4,7 +4,7 @@ uint
 Skyrim::GetVersion(
 	)
 {
-	return *(DWORD *)0x00DDDC00;
+	return *(DWORD*)0x00DDDC00;
 }
 
 bool
@@ -17,16 +17,25 @@ Skyrim::UsingVersion(
 
 
 uint
+Skyrim::GetAddrDrawMenus(
+	)
+{
+	switch ( GetVersion() ) {
+		case Skyrim::v1_1_21_0: return Skyrim::Addresses::DrawMenus_v1_1_21_0;
+		case Skyrim::v1_2_12_0: return Skyrim::Addresses::DrawMenus_v1_2_12_0;
+	}
+	return NULL;
+}
+
+
+uint
 Skyrim::GetAddrIsRenaming(
 	)
 {
-	// Get the version.
 	switch ( GetVersion() ) {
 		case Skyrim::v1_1_21_0: return Skyrim::Addresses::IsRenaming_v1_1_21_0;
 		case Skyrim::v1_2_12_0: return Skyrim::Addresses::IsRenaming_v1_2_12_0;
 	}
-
-	// No version found.
 	return NULL;
 }
 
@@ -35,14 +44,50 @@ uint
 Skyrim::GetAddrPerkPoints(
 	)
 {
-	// Get the version.
 	switch ( GetVersion() ) {
 		case Skyrim::v1_1_21_0: return (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_1_21_0;
 		case Skyrim::v1_2_12_0: return (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_2_12_0;
 	}
-
-	// No version found.
 	return NULL;
+}
+
+
+uint
+Skyrim::GetAddrSettingHUDOpacity(
+	)
+{
+	switch ( GetVersion() ) {
+		case Skyrim::v1_1_21_0: return Skyrim::Addresses::SettingHUDOpacity_v1_1_21_0;
+		case Skyrim::v1_2_12_0: return Skyrim::Addresses::SettingHUDOpacity_v1_2_12_0;
+	}
+	return NULL;
+}
+
+
+uint
+Skyrim::GetAddrHudOpacity(
+	)
+{
+	// Get base offset.
+	DWORD dwPtr = NULL;
+	switch ( GetVersion() ) {
+		case Skyrim::v1_1_21_0:
+			dwPtr = *(PDWORD)( 0x1565CDC );
+			break;
+			return dwPtr + 0x3C;
+		case Skyrim::v1_2_12_0:
+			dwPtr = *(PDWORD)( 0x1591F9C );
+			break;
+		default:
+			return NULL;
+	}
+	
+	// Jump around in memory until we get where we want to be.
+	dwPtr = *(PDWORD)( dwPtr + 0x4 );
+	dwPtr = *(PDWORD)( dwPtr + 0x2C );
+	dwPtr = *(PDWORD)( dwPtr + 0x4 );
+	dwPtr = *(PDWORD)( dwPtr + 0x15C );
+	return dwPtr + 0x3C;
 }
 
 
