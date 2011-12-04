@@ -20,6 +20,14 @@ namespace Skyrim {
 		};
 	}
 
+	// Offsets.
+	namespace Offsets {
+		enum PerkPoints {
+			PerkPoints_v1_1_21_0 = 0x6D1,
+			PerkPoints_v1_2_12_0 = 0x6c9
+		};
+	}
+
 
 	// Get version.
 	uint
@@ -37,6 +45,10 @@ namespace Skyrim {
 	// Certain addresses.
 	uint
 	GetAddrIsRenaming(
+		);
+
+	uint
+	GetAddrPerkPoints(
 		);
 }
 

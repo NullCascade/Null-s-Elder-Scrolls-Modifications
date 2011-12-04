@@ -31,6 +31,21 @@ Skyrim::GetAddrIsRenaming(
 }
 
 
+uint
+Skyrim::GetAddrPerkPoints(
+	)
+{
+	// Get the version.
+	switch ( GetVersion() ) {
+		case Skyrim::v1_1_21_0: return (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_1_21_0;
+		case Skyrim::v1_2_12_0: return (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_2_12_0;
+	}
+
+	// No version found.
+	return NULL;
+}
+
+
 // SafeGetKeyPressed - Checks if the key is pressed, with checks for menu mode and modifiers.
 bool
 IO::SafeGetKeyPressed(
