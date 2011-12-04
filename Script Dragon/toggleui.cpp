@@ -4,33 +4,11 @@
 #include "common\types.h"
 #include "common\enums.h"
 #include "common\plugin.h"
+#include "common\nullCommon.h"
 
 
 // Definitions.
 #define CONFIG_FILE			"toggleui.ini"
-#define ADDR_DRAW_MENUS		0x015997D0
-#define ADDR_HUD_OPAC_SET	0x0159BCAC
-#define ADDR_IS_RENAMING	0x01592028
-
-// SafeGetKeyPressed - Checks if the key is pressed, but won't work if in menu mode.
-bool
-SafeGetKeyPressed(
-	BYTE i_Key,
-	bool i_AllowMenuMode = false
-	)
-{
-	// Menu mode check.
-	if ( !i_AllowMenuMode && Utility::IsInMenuMode() ) return false;
-
-	// Renaming an enchantment.
-	if ( *(unsigned int*)( (DWORD)( ADDR_IS_RENAMING ) ) == 1 ) return false;
-
-	// Don't enable if the key is set to 0x00.
-	if ( i_Key == 0x00 ) return false;
-
-	// Otherwise, check as normal.
-	return GetKeyPressed( i_Key );
-}
 
 
 // GetHUDOpacity - Reads the HUD opacity value from memory.
@@ -38,7 +16,7 @@ float
 GetHUDOpacity(
 	)
 {
-	return *(float*)( ADDR_HUD_OPAC_SET );
+	return *(float*)( Skyrim::GetAddrSettingHUDOpacity() );
 }
 
 
@@ -48,12 +26,7 @@ SetHUDOpacity(
 	float i_Value
 	)
 {
-	DWORD dwPtr = *(PDWORD)( 0x1591F9C );
-	dwPtr = *(PDWORD)( dwPtr + 0x4 );
-	dwPtr = *(PDWORD)( dwPtr + 0x2C );
-	dwPtr = *(PDWORD)( dwPtr + 0x4 );
-	dwPtr = *(PDWORD)( dwPtr + 0x15C );
-	*(float*)( dwPtr + 0x3C ) = i_Value;
+	*(float*)( Skyrim::GetAddrHudOpacity() ) = i_Value;
 }
 
 
@@ -63,7 +36,7 @@ SetShowUI(
 	unsigned int i_Value
 	)
 {
-	*(unsigned char*)( ADDR_DRAW_MENUS ) = i_Value;
+	*(unsigned char*)( Skyrim::GetAddrDrawMenus() ) = i_Value;
 }
 
 
@@ -130,7 +103,7 @@ main(
 		}
 
 		// Enable/disable UI.
-		if ( SafeGetKeyPressed( keyToggleUI ) ) {
+		if ( IO::SafeGetKeyPressed( keyToggleUI ) ) {
 			// Toggle menus/UI, then wait half a second.
 			showUI = !showUI;
 			SetHUDOpacity( showUI ? GetHUDOpacity() : 0.0 );
@@ -138,21 +111,21 @@ main(
 		}
 
 		// Enable/disable compass.
-		if ( SafeGetKeyPressed( keyToggleCompass ) ) {
+		if ( IO::SafeGetKeyPressed( keyToggleCompass ) ) {
 			showCompass = !showCompass;
 			SetShowCompass( showCompass );
 			keyPressWait = true;
 		}
 
 		// Enable/disable quest markers.
-		if ( SafeGetKeyPressed( keyToggleQuestMarkers ) ) {
+		if ( IO::SafeGetKeyPressed( keyToggleQuestMarkers ) ) {
 			showQuestMarkers = !showQuestMarkers;
 			SetShowQuestMarkers( showQuestMarkers );
 			keyPressWait = true;
 		}
 
 		// Enable/disable floating quest markers.
-		if ( SafeGetKeyPressed( keyToggleFloatingQuestMarkers ) ) {
+		if ( IO::SafeGetKeyPressed( keyToggleFloatingQuestMarkers ) ) {
 			showFloatingQuestMarkers = !showFloatingQuestMarkers;
 			SetShowFloatingQuestMarkers( showFloatingQuestMarkers );
 			keyPressWait = true;
