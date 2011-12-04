@@ -8,7 +8,6 @@
 
 // Definitions.
 #define CONFIG_FILE			"soulstoperks.ini"
-#define OFFS_PERK_COUNT		0x6c9
 
 
 // Costs.
