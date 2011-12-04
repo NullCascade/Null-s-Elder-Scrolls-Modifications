@@ -36,7 +36,7 @@ unsigned char
 GetPerkCount(
 	) 
 {
-	return *(unsigned char*)( (DWORD)( Game::GetPlayer() ) + OFFS_PERK_COUNT );
+	return *(unsigned char*)( Skyrim::GetAddrPerkPoints() );
 }
 
 
@@ -46,7 +46,7 @@ SetPerkCount(
 	unsigned char i_Count
 	)
 {
-	*(unsigned char*)( (DWORD)( Game::GetPlayer() ) + OFFS_PERK_COUNT ) = i_Count;
+	*(unsigned char*)( Skyrim::GetAddrPerkPoints() ) = i_Count;
 }
 
 
