@@ -35,6 +35,42 @@ float rotZ = 0.0f;
 TESObjectREFR* grabbedObj = NULL;
 TESObjectCELL* currentCell = NULL;
 
+// SetPos - Sets the object's position on an axis - without blinking!
+void
+SetPosition(
+	char* axis,
+	float value
+	)
+{
+	// Is an object grabbed?
+	if ( !grabbedObj ) return;
+
+	// Build command.
+	char command[128];
+	sprintf( command, "SetPos %s %f", axis, value );
+
+	// Set position.
+	ExecuteConsoleCommand( command, grabbedObj );
+}
+
+// SetAngle - Sets the object's rotation on an axis - without blinking!
+void
+SetAngle(
+	char* axis,
+	float value
+	)
+{
+	// Is an object grabbed?
+	if ( !grabbedObj ) return;
+
+	// Build command.
+	char command[128];
+	sprintf( command, "SetAngle %s %f", axis, value );
+
+	// Set position.
+	ExecuteConsoleCommand( command, grabbedObj );
+}
+
 // EnableDecorationMode
 bool
 EnableDecorationMode(
@@ -57,7 +93,7 @@ EnableDecorationMode(
 	assistMode = true;
 	PrintNote( "Decorator mode enabled." );
 	Debug::ToggleCollisions();
-	ObjectReference::BlockActivation( grabbedObj, true );
+//	ObjectReference::BlockActivation( grabbedObj, true );
 	grabbedObj = grabbedObjTmp;
 	currentCell = ObjectReference::GetParentCell( (TESObjectREFR*)Game::GetPlayer() );
 
@@ -87,7 +123,7 @@ DisableDecorationMode(
 	assistMode = false;
 	PrintNote( "Decorator mode disabled." );
 	Debug::ToggleCollisions();
-	ObjectReference::BlockActivation( grabbedObj, false );
+//	ObjectReference::BlockActivation( grabbedObj, false );
 	grabbedObj = NULL;
 
 	// Reset position data.
@@ -231,8 +267,16 @@ main(
 			}
 
 			// Update the location and rotation.
-			if ( moved ) ObjectReference::SetPosition( grabbedObj, posX, posY, posZ );
-			if ( rotated ) ObjectReference::SetAngle( grabbedObj, rotX, rotY, rotZ );
+			if ( moved ) {
+				SetPosition( "X", posX );
+				SetPosition( "Y", posY );
+				SetPosition( "Z", posZ );
+			}
+			if ( rotated ) {
+				SetAngle( "X", rotX );
+				SetAngle( "Y", rotY );
+				SetAngle( "Z", rotZ );
+			}
 			Wait( delay );
 		}
 
