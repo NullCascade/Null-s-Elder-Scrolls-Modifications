@@ -43,7 +43,7 @@ SetPosition(
 	)
 {
 	// Is an object grabbed?
-	if ( !grabbedObj ) return;
+	if ( !grabbedObj || !assistMode ) return;
 
 	// Build command.
 	char command[128];
@@ -61,7 +61,7 @@ SetAngle(
 	)
 {
 	// Is an object grabbed?
-	if ( !grabbedObj ) return;
+	if ( !grabbedObj || !assistMode ) return;
 
 	// Build command.
 	char command[128];
