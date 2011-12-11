@@ -9,6 +9,9 @@
 
 // Definitions.
 #define CONFIG_FILE			"toggleui.ini"
+#define LOG_FILE			"toggleui.log"
+#define MOD_TITLE			"Toggle UI"
+#define MOD_VERSION			"v1.4"
 
 
 // GetHUDOpacity - Reads the HUD opacity value from memory.
@@ -16,6 +19,7 @@ float
 GetHUDOpacity(
 	)
 {
+	if ( Skyrim::GetAddrSettingHUDOpacity() == NULL ) return 0.0f;
 	return *(float*)( Skyrim::GetAddrSettingHUDOpacity() );
 }
 
@@ -26,6 +30,7 @@ SetHUDOpacity(
 	float i_Value
 	)
 {
+	if ( Skyrim::GetAddrSettingHUDOpacity() == NULL ) return;
 	*(float*)( Skyrim::GetAddrHudOpacity() ) = i_Value;
 }
 
@@ -36,6 +41,7 @@ SetShowUI(
 	unsigned int i_Value
 	)
 {
+	if ( Skyrim::GetAddrDrawMenus() == NULL ) return;
 	*(unsigned char*)( Skyrim::GetAddrDrawMenus() ) = i_Value;
 }
 
@@ -89,16 +95,29 @@ main(
 	SetShowCompass( showCompass );
 	SetShowQuestMarkers( showQuestMarkers );
 	SetShowFloatingQuestMarkers( showFloatingQuestMarkers );
-	SetHUDOpacity( showUI ? GetHUDOpacity() : 0.0 );
+	SetHUDOpacity( showUI ? GetHUDOpacity() : 0.0f );
 
 	// Handle multiple keys at once.
 	bool keyPressWait = false;
+
+	// Fail state check.
+	bool failState = false;
+	if ( !Skyrim::GetAddrDrawMenus() || !Skyrim::GetAddrSettingHUDOpacity() || !Skyrim::GetAddrHudOpacity() ) {
+		PrintNote( "[ToggleUI] Skyrim version not supported: 0x%x", Skyrim::GetVersion() );
+		failState = true;
+	}
 	
 	// Main plugin loop.
 	while ( true ) {
+		// Fail state?
+		if ( failState ) {
+			Wait( 1000 );
+			continue;
+		}
+
 		// Wait if we just got a key event.
 		if ( keyPressWait ) {
-			Wait( 250 );
+			Wait( 500 );
 			keyPressWait = false;
 		}
 
@@ -106,7 +125,7 @@ main(
 		if ( IO::SafeGetKeyPressed( keyToggleUI ) ) {
 			// Toggle menus/UI, then wait half a second.
 			showUI = !showUI;
-			SetHUDOpacity( showUI ? GetHUDOpacity() : 0.0 );
+			SetHUDOpacity( showUI ? GetHUDOpacity() : 0.0f );
 			keyPressWait = true;
 		}
 
