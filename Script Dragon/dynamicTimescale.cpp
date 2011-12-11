@@ -28,7 +28,7 @@ SetTimeScale(
 
 	// Build command.
 	char command[64];
-	sprintf( command, "set timescale to %d", i_Timescale );
+	sprintf_s( command, "set timescale to %d", i_Timescale );
 	
 	// Change timescale.
 	ExecuteConsoleCommand( command, Game::GetPlayer() );
@@ -40,7 +40,10 @@ bool
 PlayerInInteriorCell(
 	)
 {
-	return Cell::IsInterior( ObjectReference::GetParentCell( (TESObjectREFR*)Game::GetPlayer() ) );
+	TESObjectCELL* cell = NULL;
+	cell = ObjectReference::GetParentCell( (TESObjectREFR*)Game::GetPlayer() );
+	if ( cell == NULL ) return false;
+	return Cell::IsInterior( cell );
 }
 
 
