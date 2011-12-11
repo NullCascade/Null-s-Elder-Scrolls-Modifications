@@ -33,7 +33,7 @@ namespace Skyrim {
 		enum HUDOpacityBase {
 			HUDOpacityBase_v1_1_21_0 = 0x01565CDC,
 			HUDOpacityBase_v1_2_12_0 = 0x01591F9C,
-			HUDOpacityBase_v1_3_7_0 = NULL
+			HUDOpacityBase_v1_3_7_0 = 0x0158078C
 		};
 	}
 
@@ -61,23 +61,23 @@ namespace Skyrim {
 
 
 	// Certain addresses.
-	uint
+	BYTE*
 	GetAddrDrawMenus(
 		);
 
-	uint
+	BYTE*
 	GetAddrIsRenaming(
 		);
 
-	uint
+	BYTE*
 	GetAddrPerkPoints(
 		);
 	
-	uint
+	float*
 	GetAddrSettingHUDOpacity(
 		);
 
-	uint
+	float*
 	GetAddrHudOpacity(
 		);
 }

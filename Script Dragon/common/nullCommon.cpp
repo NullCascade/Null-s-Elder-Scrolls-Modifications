@@ -16,59 +16,59 @@ Skyrim::UsingVersion(
 }
 
 
-uint
+BYTE*
 Skyrim::GetAddrDrawMenus(
 	)
 {
 	switch ( GetVersion() ) {
-		case Skyrim::v1_1_21_0: return Skyrim::Addresses::DrawMenus_v1_1_21_0;
-		case Skyrim::v1_2_12_0: return Skyrim::Addresses::DrawMenus_v1_2_12_0;
-		case Skyrim::v1_3_7_0: return Skyrim::Addresses::DrawMenus_v1_3_7_0;
+		case Skyrim::v1_1_21_0: return (BYTE*)( Skyrim::Addresses::DrawMenus_v1_1_21_0 );
+		case Skyrim::v1_2_12_0: return (BYTE*)( Skyrim::Addresses::DrawMenus_v1_2_12_0 );
+		case Skyrim::v1_3_7_0: return (BYTE*)( Skyrim::Addresses::DrawMenus_v1_3_7_0 );
 	}
 	return NULL;
 }
 
 
-uint
+BYTE*
 Skyrim::GetAddrIsRenaming(
 	)
 {
 	switch ( GetVersion() ) {
-		case Skyrim::v1_1_21_0: return Skyrim::Addresses::IsRenaming_v1_1_21_0;
-		case Skyrim::v1_2_12_0: return Skyrim::Addresses::IsRenaming_v1_2_12_0;
-		case Skyrim::v1_3_7_0: return Skyrim::Addresses::IsRenaming_v1_3_7_0;
+		case Skyrim::v1_1_21_0: return (BYTE*)( Skyrim::Addresses::IsRenaming_v1_1_21_0 );
+		case Skyrim::v1_2_12_0: return (BYTE*)( Skyrim::Addresses::IsRenaming_v1_2_12_0 );
+		case Skyrim::v1_3_7_0: return (BYTE*)( Skyrim::Addresses::IsRenaming_v1_3_7_0 );
 	}
 	return NULL;
 }
 
 
-uint
+BYTE*
 Skyrim::GetAddrPerkPoints(
 	)
 {
 	switch ( GetVersion() ) {
-		case Skyrim::v1_1_21_0: return (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_1_21_0;
-		case Skyrim::v1_2_12_0: return (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_2_12_0;
-		case Skyrim::v1_3_7_0: return (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_3_7_0;
+		case Skyrim::v1_1_21_0: return (BYTE*)( (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_1_21_0 );
+		case Skyrim::v1_2_12_0: return (BYTE*)( (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_2_12_0 );
+		case Skyrim::v1_3_7_0: return (BYTE*)( (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_3_7_0 );
 	}
 	return NULL;
 }
 
 
-uint
+float*
 Skyrim::GetAddrSettingHUDOpacity(
 	)
 {
 	switch ( GetVersion() ) {
-		case Skyrim::v1_1_21_0: return Skyrim::Addresses::SettingHUDOpacity_v1_1_21_0;
-		case Skyrim::v1_2_12_0: return Skyrim::Addresses::SettingHUDOpacity_v1_2_12_0;
-		case Skyrim::v1_3_7_0: return Skyrim::Addresses::SettingHUDOpacity_v1_3_7_0;
+		case Skyrim::v1_1_21_0: return (float*)( Skyrim::Addresses::SettingHUDOpacity_v1_1_21_0 );
+		case Skyrim::v1_2_12_0: return (float*)( Skyrim::Addresses::SettingHUDOpacity_v1_2_12_0 );
+		case Skyrim::v1_3_7_0: return (float*)( Skyrim::Addresses::SettingHUDOpacity_v1_3_7_0 );
 	}
 	return NULL;
 }
 
 
-uint
+float*
 Skyrim::GetAddrHudOpacity(
 	)
 {
@@ -78,7 +78,6 @@ Skyrim::GetAddrHudOpacity(
 		case Skyrim::v1_1_21_0:
 			dwPtr = *(PDWORD)( Skyrim::Addresses::HUDOpacityBase_v1_1_21_0 );
 			break;
-			return dwPtr + 0x3C;
 		case Skyrim::v1_2_12_0:
 			dwPtr = *(PDWORD)( Skyrim::Addresses::HUDOpacityBase_v1_2_12_0 );
 			break;
@@ -88,13 +87,14 @@ Skyrim::GetAddrHudOpacity(
 		default:
 			return NULL;
 	}
-	
-	// Jump around in memory until we get where we want to be.
+
+	// Follow memory to the pointer to the value.
 	dwPtr = *(PDWORD)( dwPtr + 0x4 );
 	dwPtr = *(PDWORD)( dwPtr + 0x2C );
 	dwPtr = *(PDWORD)( dwPtr + 0x4 );
 	dwPtr = *(PDWORD)( dwPtr + 0x15C );
-	return dwPtr + 0x3C;
+	dwPtr = *(PDWORD)( dwPtr + 0x3C );
+	return (float*)( dwPtr );
 }
 
 
@@ -112,12 +112,12 @@ IO::SafeGetKeyPressed(
 	if ( !i_AllowMenuMode && Utility::IsInMenuMode() ) return false;
 
 	// Are we naming something?
-	if ( Skyrim::GetAddrIsRenaming() ) {
-		if ( *(unsigned int*)( (DWORD)( Skyrim::GetAddrIsRenaming() ) ) == 1 ) return false;
+	if ( !i_AllowMenuMode && Skyrim::GetAddrIsRenaming() ) {
+		if ( *Skyrim::GetAddrIsRenaming() == 1 ) return false;
 	}
 
 	// Don't enable if the key is set to 0x00.
-	if ( i_Key == 0x00 ) return false;
+	if ( i_Key == NULL ) return false;
 
 	// Are the control keys pressed?
 	if ( i_Control && !GetKeyPressed( 0xA2 ) ) return false;
