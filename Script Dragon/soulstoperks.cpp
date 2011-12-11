@@ -31,21 +31,21 @@ GetPerkPointCost(
 
 
 // GetPerkCount - Borrowed from the 'Perk Reset' plugin from hitachihex.
-unsigned char
+BYTE
 GetPerkCount(
 	) 
 {
-	return *(unsigned char*)( Skyrim::GetAddrPerkPoints() );
+	return *(BYTE*)( Skyrim::GetAddrPerkPoints() );
 }
 
 
 // SetPerkCount - Borrowed from the 'Perk Reset' plugin from hitachihex.
 void
 SetPerkCount(
-	unsigned char i_Count
+	BYTE i_Count
 	)
 {
-	*(unsigned char*)( Skyrim::GetAddrPerkPoints() ) = i_Count;
+	*(BYTE*)( Skyrim::GetAddrPerkPoints() ) = i_Count;
 }
 
 
@@ -78,16 +78,35 @@ main(
 	PPC_Constant = IniReadInt( CONFIG_FILE, "cost", "constant", PPC_Constant );
 	PPC_Level = IniReadInt( CONFIG_FILE, "cost", "levelMult", PPC_Level );
 
+	// Version supported?
+	bool failState = false;
+	if ( !Skyrim::GetAddrPerkPoints() ) {
+		PrintNote( "[SoulsToPerks] Skyrim version not supported: 0x%x", Skyrim::GetVersion() );
+		failState = true;
+	}
+
 	// Main plugin loop.
 	while ( true ) {
+		// Fail mode?
+		if ( failState ) {
+			Wait( 1000 );
+			continue;
+		}
+
 		// Calculate them perk points.
 		if ( IO::SafeGetKeyPressed( keyBuyPerkPoint ) ) {
 			int perkPointCost = GetPerkPointCost();
 			int perkCount = GetPerkCount();
 			int dragonSouls = GetDragonSoulCount();
 
+			// Is this version supported?
+			if ( Skyrim::GetAddrPerkPoints() == NULL ) {
+				PrintNote( "Error: Version not supported. Please update this mod." );
+				Wait( 2000 );
+			}
+
 			// Can we get more perks?
-			if ( perkCount == 255 ) {
+			else if ( perkCount == 255 ) {
 				PrintNote( "Error: Too many perks. Get rid of some and try again." );
 				Wait( 1000 );
 			}
