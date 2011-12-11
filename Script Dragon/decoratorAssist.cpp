@@ -11,11 +11,13 @@
 #define CONFIG_FILE "decoratorAssist.ini"
 
 
-// Globals.
+// Globals - INI Settings.
 int valMulti = 0;
 int moveChangeValue = 0;
 int rotChangeValue = 0;
 int delay = 0;
+
+// Globals - Key Bindings.
 BYTE keyDecorate = 0x00;
 BYTE keyRotate = 0x00;
 BYTE keyMulti = 0x00;
@@ -25,6 +27,8 @@ BYTE keyMoveYPos = 0x00;
 BYTE keyMoveYNeg = 0x00;
 BYTE keyMoveZPos = 0x00;
 BYTE keyMoveZNeg = 0x00;
+
+// Globals - Runtime Settings
 bool assistMode = false;
 float posX = 0.0f;
 float posY = 0.0f;
@@ -34,6 +38,7 @@ float rotY = 0.0f;
 float rotZ = 0.0f;
 TESObjectREFR* grabbedObj = NULL;
 TESObjectCELL* currentCell = NULL;
+
 
 // SetPos - Sets the object's position on an axis - without blinking!
 void
@@ -47,7 +52,7 @@ SetPosition(
 
 	// Build command.
 	char command[128];
-	sprintf( command, "SetPos %s %f", axis, value );
+	sprintf_s( command, "SetPos %s %f", axis, value );
 
 	// Set position.
 	ExecuteConsoleCommand( command, grabbedObj );
@@ -65,7 +70,7 @@ SetAngle(
 
 	// Build command.
 	char command[128];
-	sprintf( command, "SetAngle %s %f", axis, value );
+	sprintf_s( command, "SetAngle %s %f", axis, value );
 
 	// Set position.
 	ExecuteConsoleCommand( command, grabbedObj );
@@ -93,7 +98,6 @@ EnableDecorationMode(
 	assistMode = true;
 	PrintNote( "Decorator mode enabled." );
 	Debug::ToggleCollisions();
-//	ObjectReference::BlockActivation( grabbedObj, true );
 	grabbedObj = grabbedObjTmp;
 	currentCell = ObjectReference::GetParentCell( (TESObjectREFR*)Game::GetPlayer() );
 
@@ -123,7 +127,6 @@ DisableDecorationMode(
 	assistMode = false;
 	PrintNote( "Decorator mode disabled." );
 	Debug::ToggleCollisions();
-//	ObjectReference::BlockActivation( grabbedObj, false );
 	grabbedObj = NULL;
 
 	// Reset position data.
@@ -148,16 +151,24 @@ ShouldExitDecorationMode(
 
 	// Get the actor.
 	CActor* player = Game::GetPlayer();
-	if ( player == NULL ) return true;
+	if ( player == NULL ) {
+		return true;
+	}
 
 	// In combat?
-	if ( Actor::IsInCombat( player ) ) return true;
+	if ( Actor::IsInCombat( player ) ) {
+		return true;
+	}
 
 	// In menu mode?
-	if ( Utility::IsInMenuMode() ) return true;
+	if ( Utility::IsInMenuMode() ) {
+		return true;
+	}
 
 	// Changed area?
-	if ( currentCell != ObjectReference::GetParentCell( (TESObjectREFR*)Game::GetPlayer() ) ) return true;
+	if ( currentCell != ObjectReference::GetParentCell( (TESObjectREFR*)Game::GetPlayer() ) ) {
+		return true;
+	}
 
 	// All's good?
 	return false;
@@ -183,7 +194,7 @@ main(
 	keyMoveYNeg = IniReadInt( CONFIG_FILE, "keys", "key_y_neg", 0x00 );
 	keyMoveZPos = IniReadInt( CONFIG_FILE, "keys", "key_z_pos", 0x00 );
 	keyMoveZNeg = IniReadInt( CONFIG_FILE, "keys", "key_z_neg", 0x00 );
-	
+
 	// Main plugin loop.
 	while ( true ) {
 		// Enter/exit decoration mode.
