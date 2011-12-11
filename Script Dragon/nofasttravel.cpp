@@ -28,7 +28,7 @@ main(
 	int heartbeat = IniReadInt( CONFIG_FILE, "settings", "heartbeat", 500 );
 
 	// Initial disable.
-	Game::EnableFastTravel( false );
+	DisableFastTravel();
 	
 	// Redisable every heartbeat miliseconds.
 	while ( true ) {
