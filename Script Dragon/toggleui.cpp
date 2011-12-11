@@ -9,9 +9,6 @@
 
 // Definitions.
 #define CONFIG_FILE			"toggleui.ini"
-#define LOG_FILE			"toggleui.log"
-#define MOD_TITLE			"Toggle UI"
-#define MOD_VERSION			"v1.4"
 
 
 // GetHUDOpacity - Reads the HUD opacity value from memory.
@@ -20,7 +17,7 @@ GetHUDOpacity(
 	)
 {
 	if ( Skyrim::GetAddrSettingHUDOpacity() == NULL ) return 0.0f;
-	return *(float*)( Skyrim::GetAddrSettingHUDOpacity() );
+	return *Skyrim::GetAddrSettingHUDOpacity();
 }
 
 
@@ -31,18 +28,18 @@ SetHUDOpacity(
 	)
 {
 	if ( Skyrim::GetAddrSettingHUDOpacity() == NULL ) return;
-	*(float*)( Skyrim::GetAddrHudOpacity() ) = i_Value;
+	*Skyrim::GetAddrHudOpacity() = i_Value;
 }
 
 
 // SetShowUI - Enables/disables entire UI drawing.
 void
 SetShowUI(
-	unsigned int i_Value
+	bool i_Value
 	)
 {
 	if ( Skyrim::GetAddrDrawMenus() == NULL ) return;
-	*(unsigned char*)( Skyrim::GetAddrDrawMenus() ) = i_Value;
+	*Skyrim::GetAddrDrawMenus() = i_Value;
 }
 
 
@@ -91,20 +88,22 @@ main(
 	BYTE keyToggleQuestMarkers = IniReadInt( CONFIG_FILE, "keys", "quest_markers", 0x00 );
 	BYTE keyToggleFloatingQuestMarkers = IniReadInt( CONFIG_FILE, "keys", "float_quest_markers", 0x00 );
 
-	// Keep track of the menu state.
-	SetShowCompass( showCompass );
-	SetShowQuestMarkers( showQuestMarkers );
-	SetShowFloatingQuestMarkers( showFloatingQuestMarkers );
-	SetHUDOpacity( showUI ? GetHUDOpacity() : 0.0f );
-
 	// Handle multiple keys at once.
 	bool keyPressWait = false;
 
 	// Fail state check.
 	bool failState = false;
 	if ( !Skyrim::GetAddrDrawMenus() || !Skyrim::GetAddrSettingHUDOpacity() || !Skyrim::GetAddrHudOpacity() ) {
-		PrintNote( "[ToggleUI] Skyrim version not supported: 0x%x", Skyrim::GetVersion() );
+		PrintNote( "[ToggleUI] Skyrim version not supported: 0x%X", Skyrim::GetVersion() );
 		failState = true;
+	}
+	
+	// Initial UI set.
+	if ( !failState ) {
+		SetShowCompass( showCompass );
+		SetShowQuestMarkers( showQuestMarkers );
+		SetShowFloatingQuestMarkers( showFloatingQuestMarkers );
+		SetHUDOpacity( showUI ? GetHUDOpacity() : 0.0f );
 	}
 	
 	// Main plugin loop.
