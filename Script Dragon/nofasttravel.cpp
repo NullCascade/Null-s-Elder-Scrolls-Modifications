@@ -10,6 +10,16 @@
 // Definitions.
 #define CONFIG_FILE "nofasttravel.ini"
 
+
+// DisableFastTravel
+void
+DisableFastTravel(
+	)
+{
+	ExecuteConsoleCommand( "EnableFastTravel 0", Game::GetPlayer() );
+}
+
+
 void
 main(
 	)
@@ -22,9 +32,8 @@ main(
 	
 	// Redisable every heartbeat miliseconds.
 	while ( true ) {
+		DisableFastTravel();
 		Wait(heartbeat);
-		Game::EnableFastTravel( false );
-		Wait(0);
 	}
 }
 
