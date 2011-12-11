@@ -23,6 +23,7 @@ Skyrim::GetAddrDrawMenus(
 	switch ( GetVersion() ) {
 		case Skyrim::v1_1_21_0: return Skyrim::Addresses::DrawMenus_v1_1_21_0;
 		case Skyrim::v1_2_12_0: return Skyrim::Addresses::DrawMenus_v1_2_12_0;
+		case Skyrim::v1_3_7_0: return Skyrim::Addresses::DrawMenus_v1_3_7_0;
 	}
 	return NULL;
 }
@@ -35,6 +36,7 @@ Skyrim::GetAddrIsRenaming(
 	switch ( GetVersion() ) {
 		case Skyrim::v1_1_21_0: return Skyrim::Addresses::IsRenaming_v1_1_21_0;
 		case Skyrim::v1_2_12_0: return Skyrim::Addresses::IsRenaming_v1_2_12_0;
+		case Skyrim::v1_3_7_0: return Skyrim::Addresses::IsRenaming_v1_3_7_0;
 	}
 	return NULL;
 }
@@ -47,6 +49,7 @@ Skyrim::GetAddrPerkPoints(
 	switch ( GetVersion() ) {
 		case Skyrim::v1_1_21_0: return (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_1_21_0;
 		case Skyrim::v1_2_12_0: return (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_2_12_0;
+		case Skyrim::v1_3_7_0: return (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_3_7_0;
 	}
 	return NULL;
 }
@@ -59,6 +62,7 @@ Skyrim::GetAddrSettingHUDOpacity(
 	switch ( GetVersion() ) {
 		case Skyrim::v1_1_21_0: return Skyrim::Addresses::SettingHUDOpacity_v1_1_21_0;
 		case Skyrim::v1_2_12_0: return Skyrim::Addresses::SettingHUDOpacity_v1_2_12_0;
+		case Skyrim::v1_3_7_0: return Skyrim::Addresses::SettingHUDOpacity_v1_3_7_0;
 	}
 	return NULL;
 }
@@ -72,11 +76,14 @@ Skyrim::GetAddrHudOpacity(
 	DWORD dwPtr = NULL;
 	switch ( GetVersion() ) {
 		case Skyrim::v1_1_21_0:
-			dwPtr = *(PDWORD)( 0x1565CDC );
+			dwPtr = *(PDWORD)( Skyrim::Addresses::HUDOpacityBase_v1_1_21_0 );
 			break;
 			return dwPtr + 0x3C;
 		case Skyrim::v1_2_12_0:
-			dwPtr = *(PDWORD)( 0x1591F9C );
+			dwPtr = *(PDWORD)( Skyrim::Addresses::HUDOpacityBase_v1_2_12_0 );
+			break;
+		case Skyrim::v1_3_7_0:
+			dwPtr = *(PDWORD)( Skyrim::Addresses::HUDOpacityBase_v1_3_7_0 );
 			break;
 		default:
 			return NULL;
@@ -102,10 +109,12 @@ IO::SafeGetKeyPressed(
 	)
 {
 	// Don't enable in menu mode.
-	if ( Utility::IsInMenuMode() ) return false;
+	if ( !i_AllowMenuMode && Utility::IsInMenuMode() ) return false;
 
 	// Are we naming something?
-	if ( *(unsigned int*)( (DWORD)( Skyrim::GetAddrIsRenaming() ) ) == 1 ) return false;
+	if ( Skyrim::GetAddrIsRenaming() ) {
+		if ( *(unsigned int*)( (DWORD)( Skyrim::GetAddrIsRenaming() ) ) == 1 ) return false;
+	}
 
 	// Don't enable if the key is set to 0x00.
 	if ( i_Key == 0x00 ) return false;
