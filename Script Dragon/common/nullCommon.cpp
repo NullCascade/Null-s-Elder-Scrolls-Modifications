@@ -93,8 +93,7 @@ Skyrim::GetAddrHudOpacity(
 	dwPtr = *(PDWORD)( dwPtr + 0x2C );
 	dwPtr = *(PDWORD)( dwPtr + 0x4 );
 	dwPtr = *(PDWORD)( dwPtr + 0x15C );
-	dwPtr = *(PDWORD)( dwPtr + 0x3C );
-	return (float*)( dwPtr );
+	return (float*)( dwPtr + 0x3C );
 }
 
 
@@ -108,16 +107,12 @@ IO::SafeGetKeyPressed(
 	bool i_Alt
 	)
 {
-	// Don't enable in menu mode.
-	if ( !i_AllowMenuMode && Utility::IsInMenuMode() ) return false;
-
-	// Are we naming something?
-	if ( !i_AllowMenuMode && Skyrim::GetAddrIsRenaming() ) {
-		if ( *Skyrim::GetAddrIsRenaming() == 1 ) return false;
-	}
-
 	// Don't enable if the key is set to 0x00.
 	if ( i_Key == NULL ) return false;
+
+	// Don't enable in menu mode.
+	if ( !i_AllowMenuMode && Utility::IsInMenuMode() ) return false;
+	if ( ( !i_AllowMenuMode ) && ( Skyrim::GetAddrIsRenaming() ) && ( *Skyrim::GetAddrIsRenaming() == 1 ) ) return false;
 
 	// Are the control keys pressed?
 	if ( i_Control && !GetKeyPressed( 0xA2 ) ) return false;
