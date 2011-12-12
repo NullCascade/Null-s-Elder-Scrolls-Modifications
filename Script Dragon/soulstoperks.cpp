@@ -35,7 +35,7 @@ BYTE
 GetPerkCount(
 	) 
 {
-	return *(BYTE*)( Skyrim::GetAddrPerkPoints() );
+	return *Skyrim::GetAddrPerkPoints();
 }
 
 
@@ -45,7 +45,7 @@ SetPerkCount(
 	BYTE i_Count
 	)
 {
-	*(BYTE*)( Skyrim::GetAddrPerkPoints() ) = i_Count;
+	*Skyrim::GetAddrPerkPoints() = i_Count;
 }
 
 
@@ -108,13 +108,13 @@ main(
 			// Can we get more perks?
 			else if ( perkCount == 255 ) {
 				PrintNote( "Error: Too many perks. Get rid of some and try again." );
-				Wait( 1000 );
+				Wait( 2000 );
 			}
 
 			// Do we have enough souls?
 			else if ( dragonSouls < perkPointCost ) {
 				PrintNote( "%d dragon souls are required for more power.", perkPointCost );
-				Wait( 1000 );
+				Wait( 2000 );
 			}
 
 			// All's good? Give me my perk!
@@ -122,7 +122,7 @@ main(
 				ModDragonSoulCount( -perkPointCost );
 				SetPerkCount( perkCount + 1 );
 				PrintNote( "The souls of %d dragons have granted you a new power.", perkPointCost );
-				Wait( 1000 );
+				Wait( 2000 );
 			}
 		}
 
