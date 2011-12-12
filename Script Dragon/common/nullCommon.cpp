@@ -1,11 +1,13 @@
 #include "nullCommon.h"
 
+
 uint
 Skyrim::GetVersion(
 	)
 {
 	return *(DWORD*)0x00DDDC00;
 }
+
 
 bool
 Skyrim::UsingVersion(

@@ -165,11 +165,6 @@ ShouldExitDecorationMode(
 		return true;
 	}
 
-	// Changed area?
-	if ( currentCell != ObjectReference::GetParentCell( (TESObjectREFR*)Game::GetPlayer() ) ) {
-		return true;
-	}
-
 	// All's good?
 	return false;
 }
