@@ -26,6 +26,7 @@ Skyrim::GetAddrDrawMenus(
 		case Skyrim::v1_1_21_0: return (BYTE*)( Skyrim::Addresses::DrawMenus_v1_1_21_0 );
 		case Skyrim::v1_2_12_0: return (BYTE*)( Skyrim::Addresses::DrawMenus_v1_2_12_0 );
 		case Skyrim::v1_3_7_0: return (BYTE*)( Skyrim::Addresses::DrawMenus_v1_3_7_0 );
+		case Skyrim::v1_3_10_0: return (BYTE*)( Skyrim::Addresses::DrawMenus_v1_3_10_0 );
 	}
 	return NULL;
 }
@@ -39,6 +40,7 @@ Skyrim::GetAddrIsRenaming(
 		case Skyrim::v1_1_21_0: return (BYTE*)( Skyrim::Addresses::IsRenaming_v1_1_21_0 );
 		case Skyrim::v1_2_12_0: return (BYTE*)( Skyrim::Addresses::IsRenaming_v1_2_12_0 );
 		case Skyrim::v1_3_7_0: return (BYTE*)( Skyrim::Addresses::IsRenaming_v1_3_7_0 );
+		case Skyrim::v1_3_10_0: return (BYTE*)( Skyrim::Addresses::IsRenaming_v1_3_10_0 );
 	}
 	return NULL;
 }
@@ -52,6 +54,7 @@ Skyrim::GetAddrPerkPoints(
 		case Skyrim::v1_1_21_0: return (BYTE*)( (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_1_21_0 );
 		case Skyrim::v1_2_12_0: return (BYTE*)( (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_2_12_0 );
 		case Skyrim::v1_3_7_0: return (BYTE*)( (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_3_7_0 );
+		case Skyrim::v1_3_10_0: return (BYTE*)( (DWORD)( Game::GetPlayer() ) + Skyrim::Offsets::PerkPoints_v1_3_10_0 );
 	}
 	return NULL;
 }
@@ -65,6 +68,7 @@ Skyrim::GetAddrSettingHUDOpacity(
 		case Skyrim::v1_1_21_0: return (float*)( Skyrim::Addresses::SettingHUDOpacity_v1_1_21_0 );
 		case Skyrim::v1_2_12_0: return (float*)( Skyrim::Addresses::SettingHUDOpacity_v1_2_12_0 );
 		case Skyrim::v1_3_7_0: return (float*)( Skyrim::Addresses::SettingHUDOpacity_v1_3_7_0 );
+		case Skyrim::v1_3_10_0: return (float*)( Skyrim::Addresses::SettingHUDOpacity_v1_3_10_0 );
 	}
 	return NULL;
 }
@@ -85,6 +89,9 @@ Skyrim::GetAddrHudOpacity(
 			break;
 		case Skyrim::v1_3_7_0:
 			dwPtr = *(PDWORD)( Skyrim::Addresses::HUDOpacityBase_v1_3_7_0 );
+			break;
+		case Skyrim::v1_3_10_0:
+			dwPtr = *(PDWORD)( Skyrim::Addresses::HUDOpacityBase_v1_3_10_0 );
 			break;
 		default:
 			return NULL;
