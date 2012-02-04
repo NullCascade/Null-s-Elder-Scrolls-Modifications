@@ -16,7 +16,7 @@ void
 DisableFastTravel(
 	)
 {
-	ExecuteConsoleCommand( "EnableFastTravel 0", Game::GetPlayer() );
+	ExecuteConsoleCommand( "EnableFastTravel 0", NULL );
 }
 
 

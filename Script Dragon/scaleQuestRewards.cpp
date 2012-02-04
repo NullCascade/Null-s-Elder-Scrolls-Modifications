@@ -38,9 +38,10 @@ UpgradeItem(
 	)
 {
 	unsigned int playerLevel = Actor::GetLevel( Game::GetPlayer() );
-	while ( PlayerHasItem( i_From ) && playerLevel >= i_LevelReq ) {
-		ObjectReference::RemoveItem( GetPlayerRef(), Game::GetFormById( i_From ), 1, false, 0 );
-		ObjectReference::AddItem( GetPlayerRef(), Game::GetFormById( i_To ), 1, false );
+	if ( PlayerHasItem( i_From ) && playerLevel >= i_LevelReq ) {
+		int count = ObjectReference::GetItemCount( GetPlayerRef(), Game::GetFormById( i_From ) );
+		ObjectReference::RemoveItem( GetPlayerRef(), Game::GetFormById( i_From ), count, false, 0 );
+		ObjectReference::AddItem( GetPlayerRef(), Game::GetFormById( i_To ), count, false );
 	}
 }
 
