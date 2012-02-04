@@ -31,7 +31,7 @@ SetTimeScale(
 	sprintf_s( command, "set timescale to %d", i_Timescale );
 	
 	// Change timescale.
-	ExecuteConsoleCommand( command, Game::GetPlayer() );
+	ExecuteConsoleCommand( command, NULL );
 }
 
 
